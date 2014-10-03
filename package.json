@@ -1,0 +1,32 @@
+{
+  "name": "accept",
+  "description": "HTTP Accept-* headers parsing",
+  "version": "1.0.0",
+  "repository": "git://github.com/hapijs/accept",
+  "main": "index",
+  "keywords": [
+    "HTTP",
+    "header",
+    "accept",
+    "accept-encoding"
+  ],
+  "engines": {
+    "node": ">=0.10.32"
+  },
+  "dependencies": {
+    "boom": "2.x.x",
+    "hoek": "2.x.x"
+  },
+  "devDependencies": {
+    "lab": "4.x.x"
+  },
+  "scripts": {
+    "test": "make test-cov"
+  },
+  "licenses": [
+    {
+      "type": "BSD",
+      "url": "http://github.com/hapijs/accept/raw/master/LICENSE"
+    }
+  ]
+}
