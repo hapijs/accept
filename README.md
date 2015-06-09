@@ -12,13 +12,26 @@ Accept helps to answer the question of whether the browser can use certain conte
 
 Additional details about Accept headers and content negotiation can be found in [IETF RFC 7231, Section 5.3](https://tools.ietf.org/html/rfc7231#section-5.3).
 
-## Parsing for a specific encoding
+## Usage
 
-Using the `encoding` function will return a `string` matching a type of encoding.  `Encoding` takes two parameters, `encoding(encodingHeader, [preferences])`.  The headers parameter is required, but the preferences are optional.  If no preferences are provided, encoding will find the first supported encoding option and return that.
+### `encoding(encodingHeader, [preferences])`
+
+Given a string of acceptable encodings from a HTTP request, and optionally an array of preferences, it will return a string with the best fit encoding that should be used in the HTTP response.  If no preferences array parameter is given the highest weighted or first ordered encoding is returned.  If weightings are given in the header they are taken into account and the highest weighted match is returned.  If a preferences array is given the best match from the array is returned.  For more information about how the preferences array works see the section below on [Preferences](#preferences).
 
 ```
 var accepts = Accept.encoding("gzip, deflate, sdch"); // accepts === "gzip"
+var accepts = Accept.encoding("gzip, deflate, sdch", ["deflate", "identity"]); // accepts === "delate"
 ```
+
+### `encodings(encodingHeader)`
+
+Given a string of acceptable encodings from a HTTP request it will return an array of strings indicating the possible encoding options that can be used in the HTTP response, in order from most preferred to least as determined by the encoding weight.  This takes into account any weighting parameters given in the header for ordering and exclusion.
+
+```
+var accepts = Accept.encodings("compress;q=0.5, gzip;q=1.0"); // accepts === ["gzip", "compress", "identity"]
+```
+
+## Examples
 
 ### Preferences
 
@@ -34,7 +47,7 @@ Your preferences are evaluated without any case sensitivity, to better match wha
 var accepts = Accept.encoding("gZip, deflate, sdch", ["gzip"]); // accepts === "gzip"
 ```
 
-If you supply a preferences array, and no match if found, `encoding` will return an empty string, rather than an encoding from the header.
+If you supply a preferences array, and no match if found, `encoding()` will return an empty string, rather than an encoding from the header.
 
 ```
 var accepts = Accept.encoding("gZip", ["deflate"]); // accepts === ""
@@ -57,7 +70,7 @@ var accepts = Accept.encoding("gzip;q=1.0, identity; q=0.5", ["identity", "gzip"
 
 ## Encodings
 
-You can also ask Accept for a list of all the supported encodings from the browser, using the `encodings` function (plural, not singular).  You will be returned an array of strings, in order from most preferred to least as determined by the encoding weight.
+You can also ask Accept for a list of all the supported encodings from the browser, using the `encodings()` function (plural, not singular).  You will be returned an array of strings, in order from most preferred to least as determined by the encoding weight.
 
 ```
 var accepts = Accept.encodings("compress;q=0.5, gzip;q=1.0"); // accepts === ["gzip", "compress", "identity"]
