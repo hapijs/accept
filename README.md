@@ -27,6 +27,15 @@ Additional details about Accept headers and content negotiation can be found in 
 
 ## Usage
 
+### `charset(charsetHeader, [preferences])`
+
+Given a string of acceptable charsets from a HTTP request, and an optional array of charset preferences, it will return a string indicating the best charset option that can be used in the HTTP response.  This takes into account any weighting parameters given in the header for ordering and exclusion.
+
+```
+var charset = Accept.charsets("iso-8859-5, unicode-1-1;q=0.8"); // charset === "iso-8859-5"
+var charset = Accept.charsets("iso-8859-5, unicode-1-1;q=0.8", ["unicode-1-1"]); // charset === "unicode-1-1"
+```
+
 ### `charsets(charsetHeader)`
 
 Given a string of acceptable charsets from a HTTP request it will return an array of strings indicating the possible charset options that can be used in the HTTP response, in order from most preferred to least as determined by the encoding weight.  This takes into account any weighting parameters given in the header for ordering and exclusion.
