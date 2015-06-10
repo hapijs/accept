@@ -8,7 +8,7 @@ Lead Maintainer - [Eran Hammer](https://github.com/hueniverse)
 
 ## Introduction
 
-Accept helps to answer the question of whether the browser can use certain content encoding techniques, such as gzip or deflate.  Accept will parse the headers of a HTTP request and tell you what the preferred encoding is, or if given a list of possible encodings, it will respond with the first available encoding that matches something in the list.
+Accept helps to answer the question of what content encoding (such as gzip or deflate) should be used in responding to a HTTP request.  Accept will parse the headers of a HTTP request and tell you what the preferred encoding is, or if given a list of preferred encodings, it will respond with the first available encoding that matches something in the list.
 
 Additional details about Accept headers and content negotiation can be found in [IETF RFC 7231, Section 5.3](https://tools.ietf.org/html/rfc7231#section-5.3).
 
@@ -16,7 +16,7 @@ Additional details about Accept headers and content negotiation can be found in 
 
 ### `encoding(encodingHeader, [preferences])`
 
-Given a string of acceptable encodings from a HTTP request, and optionally an array of preferences, it will return a string with the best fit encoding that should be used in the HTTP response.  If no preferences array parameter is given the highest weighted or first ordered encoding is returned.  If weightings are given in the header they are taken into account and the highest weighted match is returned.  If a preferences array is given the best match from the array is returned.  For more information about how the preferences array works see the section below on [Preferences](#preferences).
+Given a string of acceptable encodings from a HTTP request, and optionally an array of preferences, it will return a string with the best fit encoding that should be used in the HTTP response.  If no preferences array parameter is given the highest weighted or first ordered encoding is returned.  If weightings are given in the header (using the q parameter) they are taken into account and the highest weighted match is returned.  If a preferences array is given the best match from the array is returned.  For more information about how the preferences array works see the section below on [Preferences](#preferences).
 
 ```
 var accepts = Accept.encoding("gzip, deflate, sdch"); // accepts === "gzip"
