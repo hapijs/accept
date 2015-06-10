@@ -40,6 +40,18 @@ Given a string of acceptable encodings from a HTTP request it will return an arr
 var encodings = Accept.encodings("compress;q=0.5, gzip;q=1.0"); // encodings === ["gzip", "compress", "identity"]
 ```
 
+### `parseAll(headers)`
+
+Given the headers from a Hapi request object, `parseAll()` will parse all of the Accepts-* headers it currently understands into an object.
+
+```
+var all = Accept.parseAll(request.headers);
+// all === {
+//    "charsets": ["iso-8859-5", "unicode-1-1"],
+//    "encodings": ["gzip", "compress", "identity"]
+//}
+```
+
 ## Examples
 
 ### Preferences
