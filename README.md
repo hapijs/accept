@@ -1,10 +1,23 @@
-#accept
+#Accept
 
 HTTP Accept-* headers parsing.
 
 [![Build Status](https://secure.travis-ci.org/hapijs/accept.png)](http://travis-ci.org/hapijs/accept)
 
 Lead Maintainer - [Mark Bradshaw](https://github.com/mark-bradshaw)
+
+## Table of Contents
+
+- [Introduction](#introduction)
+- [Usage](#usage)
+    - [`charsets(charsetHeader)`](#charsetscharsetheader)
+    - [`encoding(encodingHeader, [preferences])`](#encodingencodingheader-preferences)
+    - [`encodings(encodingHeader)`](#encodingsencodingheader)
+    - [`parseAll(headers)`](#parseallheaders)
+- [Encoding(s)](#encodings)
+    - [Preferences](#preferences)
+    - [Weighted Encoding](#weighted-encoding)
+    - [Identity](#identity)
 
 ## Introduction
 
@@ -52,7 +65,7 @@ var all = Accept.parseAll(request.headers);
 //}
 ```
 
-## Examples
+## Encoding(s)
 
 ### Preferences
 
@@ -80,7 +93,7 @@ If the encoding header is the special "*" that indicates the browser will accept
 var encoding = Accept.encoding("*", ["gzip"]); // encoding === "gzip"
 ```
 
-### Weighted encoding
+### Weighted Encoding
 
 The encoding header may optionally include preferential weighting to indicate what encoding it would like for you to use in your response.  In that case your preferences are matched with the weighting in mind, and the highest weighted option will be returned, no matter in what order you list your preferences.  The browser weighting is most important.
 
@@ -89,9 +102,9 @@ var encoding = Accept.encoding("gzip;q=1.0, identity; q=0.5", ["identity", "gzip
 ```
 
 
-## Encodings
+## Identity
 
-You can also ask Accept for a list of all the supported encodings from the browser, using the `encodings()` function (plural, not singular).  You will be returned an array of strings, in order from most preferred to least as determined by the encoding weight.
+When you ask Accept for a list of all the supported encodings from the request, using the `encodings()` function (plural, not singular), you will be returned an array of strings in order from most preferred to least as determined by the encoding weight.
 
 ```
 var encodings = Accept.encodings("compress;q=0.5, gzip;q=1.0"); // encodings === ["gzip", "compress", "identity"]
