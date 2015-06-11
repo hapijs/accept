@@ -23,7 +23,7 @@ Lead Maintainer - [Mark Bradshaw](https://github.com/mark-bradshaw)
 
 ## Introduction
 
-Accept helps to answer the question of what specific types of technologies should be used in responding to a HTTP request.  Accept will parse the headers of a HTTP request and tell you what the preferred encoding is, or what charsets are supported, etc..
+Accept helps to answer the question of how best to respond to a HTTP request, based on the requesting browser's capabilities.  Accept will parse the headers of a HTTP request and tell you what the preferred encoding is, what language should be used, what charsets are supported, etc...
 
 Additional details about Accept headers and content negotiation can be found in [IETF RFC 7231, Section 5.3](https://tools.ietf.org/html/rfc7231#section-5.3).
 
