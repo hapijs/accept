@@ -28,11 +28,14 @@ describe('parseAll()', function () {
         var headers = {};
         headers['accept-charset'] = 'iso-8859-5, unicode-1-1;q=0.8, *;q=0.001';
         headers['accept-encoding'] = 'compress;q=0.5, gzip;q=1.0';
+        headers['accept-language'] = 'da, en;q=0.7, en-gb;q=0.8';
+
         var accept = Accept.parseAll(headers);
         expect(accept.isBoom).to.not.exist();
         expect(accept).to.deep.equal({
             charsets: ['iso-8859-5', 'unicode-1-1', '*'],
-            encodings: ['gzip', 'compress', 'identity']
+            encodings: ['gzip', 'compress', 'identity'],
+            languages: ['da', 'en-gb', 'en']
         });
         done();
     });
