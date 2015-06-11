@@ -14,9 +14,9 @@ Lead Maintainer - [Mark Bradshaw](https://github.com/mark-bradshaw)
     - [`encoding(encodingHeader, [preferences])`](#encodingencodingheader-preferences)
     - [`encodings(encodingHeader)`](#encodingsencodingheader)
     - [`parseAll(headers)`](#parseallheaders)
+- [Weightings](#weightings)
 - [Encoding(s)](#encodings)
     - [Preferences](#preferences)
-    - [Weighted Encoding](#weighted-encoding)
     - [Identity](#identity)
 
 ## Introduction
@@ -74,6 +74,20 @@ var all = Accept.parseAll(request.headers);
 //}
 ```
 
+
+## Weightings
+
+The Accept-* headers may optionally include preferential weighting to indicate what encoding it would like for you to use in your response.  It does this with `q` parameters in the headers, which stands for quality.  These q weightings must be in the range of 0 to 1, with a max of three decimal places.  The weightings are used to order the data given in the header, with the highest number being most preferential.  Anything with a q rating of 0 is not allowed at all.
+
+If a particular Accept method allows a `preferences` array parameter, such as `encoding()`, the weightings in the header affect which preference will be returned.  Your preferences are matched with the weighting in mind, and the highest weighted option will be returned, no matter what order you list your preferences.  The header weighting is most important.
+
+```
+var encoding = Accept.encoding("gzip;q=1.0, identity; q=0.5", ["identity", "gzip"]);
+// encoding === "gzip"
+// despite identity getting listed first in the preferences, gzip has a higher q weighting, so it is returned.
+```
+
+
 ## Encoding(s)
 
 ### Preferences
@@ -90,7 +104,7 @@ Your preferences are evaluated without any case sensitivity, to better match wha
 var encoding = Accept.encoding("gZip, deflate, sdch", ["gzip"]); // encoding === "gzip"
 ```
 
-If you supply a preferences array, and no match if found, `encoding()` will return an empty string, rather than an encoding from the header.
+If you supply a preferences array, and no match is found, `encoding()` will return an empty string, rather than an encoding from the header.
 
 ```
 var encoding = Accept.encoding("gZip", ["deflate"]); // encoding === ""
@@ -102,16 +116,8 @@ If the encoding header is the special "*" that indicates the browser will accept
 var encoding = Accept.encoding("*", ["gzip"]); // encoding === "gzip"
 ```
 
-### Weighted Encoding
 
-The encoding header may optionally include preferential weighting to indicate what encoding it would like for you to use in your response.  In that case your preferences are matched with the weighting in mind, and the highest weighted option will be returned, no matter in what order you list your preferences.  The browser weighting is most important.
-
-```
-var encoding = Accept.encoding("gzip;q=1.0, identity; q=0.5", ["identity", "gzip"]); // encoding === "gzip"
-```
-
-
-## Identity
+### Identity
 
 When you ask Accept for a list of all the supported encodings from the request, using the `encodings()` function (plural, not singular), you will be returned an array of strings in order from most preferred to least as determined by the encoding weight.
 
