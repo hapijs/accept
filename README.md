@@ -66,10 +66,13 @@ var encodings = Accept.encodings("compress;q=0.5, gzip;q=1.0"); // encodings ===
 
 ### `language(languageHeader, [preferences])`
 
-Given a string of acceptable languages from a HTTP request Accept-Language header, and an optional array of language preferences, it will return a string indicating the best language that can be used in the HTTP response.  It respects the [q weightings](#weightings) of the languages in the header, returning the matched preference with the highest weighting.
+Given a string of acceptable languages from a HTTP request Accept-Language header, and an optional array of language preferences, it will return a string indicating the best language that can be used in the HTTP response.  It respects the [q weightings](#weightings) of the languages in the header, returning the matched preference with the highest weighting.  The case of the preference does not have to match the case of the option in the header.  
 
 ```
-var languages = Accept.languages("da, en;q=0.7, en-gb;q=0.8"); // languages === ["da", "en-gb", "en"]
+var language = Accept.language("en;q=0.7, en-GB;q=0.8"); // language === "en-GB"
+
+// the case of the preference "en-gb" does not match the case of the header option "en-GB"
+var language = Accept.language("en;q=0.7, en-GB;q=0.8", ["en-gb"]); // language === "en-GB"
 ```
 
 ### `languages(languageHeader)`
@@ -77,7 +80,7 @@ var languages = Accept.languages("da, en;q=0.7, en-gb;q=0.8"); // languages === 
 Given a string of acceptable languages from a HTTP request Accept-Language header it will return an array of strings indicating the possible languages that can be used in the HTTP response, in order from most preferred to least as determined by the [q weightings](#weightings).
 
 ```
-var languages = Accept.languages("da, en;q=0.7, en-gb;q=0.8"); // languages === ["da", "en-gb", "en"]
+var languages = Accept.languages("da, en;q=0.7, en-GB;q=0.8"); // languages === ["da", "en-GB", "en"]
 ```
 
 ### `parseAll(headers)`
