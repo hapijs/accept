@@ -13,6 +13,7 @@ Lead Maintainer - [Mark Bradshaw](https://github.com/mark-bradshaw)
     - [`charsets(charsetHeader)`](#charsetscharsetheader)
     - [`encoding(encodingHeader, [preferences])`](#encodingencodingheader-preferences)
     - [`encodings(encodingHeader)`](#encodingsencodingheader)
+    - [`language(languageHeader, [preferences])`](#languagelanguageheader-preferences)
     - [`languages(languageHeader)`](#languageslanguageheader)
     - [`parseAll(headers)`](#parseallheaders)
 - [Weightings](#weightings)
@@ -61,6 +62,14 @@ Given a string of acceptable encodings from a HTTP request Accept-Encoding heade
 
 ```
 var encodings = Accept.encodings("compress;q=0.5, gzip;q=1.0"); // encodings === ["gzip", "compress", "identity"]
+```
+
+### `language(languageHeader, [preferences])`
+
+Given a string of acceptable languages from a HTTP request Accept-Language header, and an optional array of language preferences, it will return a string indicating the best language that can be used in the HTTP response.  It respects the [q weightings](#weightings) of the languages in the header, returning the matched preference with the highest weighting.
+
+```
+var languages = Accept.languages("da, en;q=0.7, en-gb;q=0.8"); // languages === ["da", "en-gb", "en"]
 ```
 
 ### `languages(languageHeader)`
