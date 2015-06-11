@@ -23,22 +23,22 @@ describe('language()', function() {
 
     it('parses the header', function(done) {
 
-        var language = Accept.language('da, en-gb, en');
+        var language = Accept.language('da, en-GB, en');
         expect(language).to.equal('da');
         done();
     });
 
     it('respects weights', function(done) {
 
-        var language = Accept.language('en;q=0.6, en-gb;q=0.8');
-        expect(language).to.equal('en-gb');
+        var language = Accept.language('en;q=0.6, en-GB;q=0.8');
+        expect(language).to.equal('en-GB');
         done();
     });
 
     it('requires the preferences parameter to be an array', function(done) {
 
         try {
-            var language = Accept.language('en;q=0.6, en-gb;q=0.8', 'en');
+            var language = Accept.language('en;q=0.6, en-GB;q=0.8', 'en');
         }
         catch (err) {
             expect(err).to.exist();
@@ -66,36 +66,43 @@ describe('language()', function() {
 
     it('ignores an empty preferences array', function(done) {
 
-        var language = Accept.language('da, en-gb, en', []);
+        var language = Accept.language('da, en-GB, en', []);
         expect(language).to.equal('da');
         done();
     });
 
     it('returns empty string if none of the preferences match', function(done) {
 
-        var language = Accept.language('da, en-gb, en', ['es']);
+        var language = Accept.language('da, en-GB, en', ['es']);
         expect(language).to.equal('');
         done();
     });
 
     it('returns first preference if header has *', function(done) {
 
-        var language = Accept.language('da, en-gb, en, *', ['en-us']);
-        expect(language).to.equal('en-us');
+        var language = Accept.language('da, en-GB, en, *', ['en-US']);
+        expect(language).to.equal('en-US');
         done();
     });
 
     it('returns first found preference that header includes', function(done) {
 
-        var language = Accept.language('da, en-gb, en', ['en-us', 'en-gb']);
-        expect(language).to.equal('en-gb');
+        var language = Accept.language('da, en-GB, en', ['en-US', 'en-GB']);
+        expect(language).to.equal('en-GB');
         done();
     });
 
     it('returns preference with highest weighting', function(done) {
 
-        var language = Accept.language('da, en-gb, en', ['en', 'en-gb']);
-        expect(language).to.equal('en-gb');
+        var language = Accept.language('da, en-GB, en', ['en', 'en-GB']);
+        expect(language).to.equal('en-GB');
+        done();
+    });
+
+    it('ignores preference casing when matching', function(done) {
+
+        var language = Accept.language('da, en-GB, en', ['en-us', 'en-gb']);
+        expect(language).to.equal('en-GB');
         done();
     });
 });
@@ -106,36 +113,36 @@ describe('languages()', function() {
 
     it('parses the header', function(done) {
 
-        var languages = Accept.languages('da, en-gb, en');
-        expect(languages).to.deep.equal(['da', 'en-gb', 'en']);
+        var languages = Accept.languages('da, en-GB, en');
+        expect(languages).to.deep.equal(['da', 'en-GB', 'en']);
         done();
     });
 
     it('orders by weight(q)', function (done) {
 
-        var languages = Accept.languages('da, en;q=0.7, en-gb;q=0.8');
-        expect(languages).to.deep.equal(['da', 'en-gb', 'en']);
+        var languages = Accept.languages('da, en;q=0.7, en-GB;q=0.8');
+        expect(languages).to.deep.equal(['da', 'en-GB', 'en']);
         done();
     });
 
-    it('ignores case', function (done) {
+    it('maintains case', function (done) {
 
-        var languages = Accept.languages('da, en-GB, EN');
-        expect(languages).to.deep.equal(['da', 'en-gb', 'en']);
+        var languages = Accept.languages('da, en-GB, en');
+        expect(languages).to.deep.equal(['da', 'en-GB', 'en']);
         done();
     });
 
     it('drops zero weighted charsets', function (done) {
 
-        var languages = Accept.languages('da, en-gb, es;q=0, en');
-        expect(languages).to.deep.equal(['da', 'en-gb', 'en']);
+        var languages = Accept.languages('da, en-GB, es;q=0, en');
+        expect(languages).to.deep.equal(['da', 'en-GB', 'en']);
         done();
     });
 
     it('ignores invalid weights', function (done) {
 
-        var languages = Accept.languages('da, en-gb;q=1.1, es;q=a, en;q=0.0001');
-        expect(languages).to.deep.equal(['da', 'en-gb', 'es', 'en']);
+        var languages = Accept.languages('da, en-GB;q=1.1, es;q=a, en;q=0.0001');
+        expect(languages).to.deep.equal(['da', 'en-GB', 'es', 'en']);
         done();
     });
 
