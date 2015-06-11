@@ -13,6 +13,7 @@ Lead Maintainer - [Mark Bradshaw](https://github.com/mark-bradshaw)
     - [`charsets(charsetHeader)`](#charsetscharsetheader)
     - [`encoding(encodingHeader, [preferences])`](#encodingencodingheader-preferences)
     - [`encodings(encodingHeader)`](#encodingsencodingheader)
+    - [`languages(languageHeader)`](#languageslanguageheader)
     - [`parseAll(headers)`](#parseallheaders)
 - [Weightings](#weightings)
 - [Encoding(s)](#encodings)
@@ -29,7 +30,7 @@ Additional details about Accept headers and content negotiation can be found in 
 
 ### `charset(charsetHeader, [preferences])`
 
-Given a string of acceptable charsets from a HTTP request, and an optional array of charset preferences, it will return a string indicating the best charset option that can be used in the HTTP response.  This takes into account any weighting parameters given in the header for ordering and exclusion.
+Given a string of acceptable charsets from a HTTP request Accept-Charset header, and an optional array of charset preferences, it will return a string indicating the best charset option that can be used in the HTTP response.  This takes into account any weighting parameters given in the header for ordering and exclusion.
 
 ```
 var charset = Accept.charsets("iso-8859-5, unicode-1-1;q=0.8"); // charset === "iso-8859-5"
@@ -38,7 +39,7 @@ var charset = Accept.charsets("iso-8859-5, unicode-1-1;q=0.8", ["unicode-1-1"]);
 
 ### `charsets(charsetHeader)`
 
-Given a string of acceptable charsets from a HTTP request it will return an array of strings indicating the possible charset options that can be used in the HTTP response, in order from most preferred to least as determined by the encoding weight.  This takes into account any weighting parameters given in the header for ordering and exclusion.
+Given a string of acceptable charsets from a HTTP request Accept-Charset header it will return an array of strings indicating the possible charset options that can be used in the HTTP response, in order from most preferred to least as determined by the [q weightings](#weightings)
 
 ```
 var charsets = Accept.charsets("iso-8859-5, unicode-1-1;q=0.8"); // charsets === ["iso-8859-5", "unicode-1-1"]
@@ -47,7 +48,7 @@ var charsets = Accept.charsets("iso-8859-5;q=0.5, unicode-1-1;q=0.8"); // charse
 
 ### `encoding(encodingHeader, [preferences])`
 
-Given a string of acceptable encodings from a HTTP request, and optionally an array of preferences, it will return a string with the best fit encoding that should be used in the HTTP response.  If no preferences array parameter is given the highest weighted or first ordered encoding is returned.  If weightings are given in the header (using the q parameter) they are taken into account and the highest weighted match is returned.  If a preferences array is given the best match from the array is returned.  For more information about how the preferences array works see the section below on [Preferences](#preferences).
+Given a string of acceptable encodings from a HTTP request Accept-Encoding header, and optionally an array of preferences, it will return a string with the best fit encoding that should be used in the HTTP response.  If no preferences array parameter is given the highest weighted or first ordered encoding is returned.  If weightings are given in the header (using the q parameter) they are taken into account and the highest weighted match is returned.  If a preferences array is given the best match from the array is returned.  For more information about how the preferences array works see the section below on [Preferences](#preferences).
 
 ```
 var encoding = Accept.encoding("gzip, deflate, sdch"); // encoding === "gzip"
@@ -56,10 +57,18 @@ var encoding = Accept.encoding("gzip, deflate, sdch", ["deflate", "identity"]); 
 
 ### `encodings(encodingHeader)`
 
-Given a string of acceptable encodings from a HTTP request it will return an array of strings indicating the possible encoding options that can be used in the HTTP response, in order from most preferred to least as determined by the encoding weight.  This takes into account any weighting parameters given in the header for ordering and exclusion.
+Given a string of acceptable encodings from a HTTP request Accept-Encoding header it will return an array of strings indicating the possible encoding options that can be used in the HTTP response, in order from most preferred to least as determined by the [q weightings](#weightings)
 
 ```
 var encodings = Accept.encodings("compress;q=0.5, gzip;q=1.0"); // encodings === ["gzip", "compress", "identity"]
+```
+
+### `languages(languageHeader)`
+
+Given a string of acceptable languages from a HTTP request Accept-Language header it will return an array of strings indicating the possible languages that can be used in the HTTP response, in order from most preferred to least as determined by the [q weightings](#weightings).
+
+```
+var languages = Accept.languages("da, en;q=0.7, en-gb;q=0.8"); // languages === ["da", "en-gb", "en"]
 ```
 
 ### `parseAll(headers)`
