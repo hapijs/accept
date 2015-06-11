@@ -93,20 +93,20 @@ var all = Accept.parseAll(request.headers);
 ```
 
 
-## Weightings
+## Q Weightings
 
-The Accept-* headers may optionally include preferential weighting to indicate what encoding it would like for you to use in your response.  It does this with `q` parameters in the headers, which stands for quality.  These q weightings must be in the range of 0 to 1, with a max of three decimal places.  The weightings are used to order the data given in the header, with the highest number being most preferential.  Anything with a q rating of 0 is not allowed at all.
+The Accept-* headers may optionally include preferential weighting to indicate which options are best for the requester.  It does this with `q` parameters in the headers (which stands for quality).  These q weightings must be in the range of 0 to 1, with a max of three decimal places.  The weightings are used to order the data given in the header, with the highest number being most preferential.  Anything with a q rating of 0 is not allowed at all.
 
 If a particular Accept method allows a `preferences` array parameter, such as `encoding()`, the weightings in the header affect which preference will be returned.  Your preferences are matched with the weighting in mind, and the highest weighted option will be returned, no matter what order you list your preferences.  The header weighting is most important.
 
 ```
-var encoding = Accept.encoding("gzip;q=1.0, identity; q=0.5", ["identity", "gzip"]);
+var encoding = Accept.encoding("gzip;q=1.0, identity;q=0.5", ["identity", "gzip"]);
 // encoding === "gzip"
-// despite identity getting listed first in the preferences, gzip has a higher q weighting, so it is returned.
+// despite identity getting listed first in the preferences array, gzip has a higher q weighting, so it is returned.
 ```
 
 
-## Encoding(s)
+## Encodings
 
 ### Preferences
 
