@@ -17,7 +17,7 @@ Lead Maintainer - [Mark Bradshaw](https://github.com/mark-bradshaw)
     - [`languages(languageHeader)`](#languageslanguageheader)
     - [`parseAll(headers)`](#parseallheaders)
 - [Weightings](#weightings)
-- [Encoding(s)](#encodings)
+- [Encodings](#encodings)
     - [Preferences](#preferences)
     - [Identity](#identity)
 
