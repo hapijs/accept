@@ -104,7 +104,15 @@ describe('charset()', function() {
 
         var charset = Accept.charset('UTF-8', ['utf-8']);
         expect(charset.isBoom).to.not.exist();
-        expect(charset).to.equal('utf-8');
+        expect(charset).to.equal('UTF-8');
+        done();
+    });
+
+    it('obeys disallow', function(done) {
+
+        var charset = Accept.charset('*, not-this;q=0, UTF-8;q=0', ['utf-8', 'iso-8859-5']);
+        expect(charset.isBoom).to.not.exist();
+        expect(charset).to.equal('iso-8859-5');
         done();
     });
 });
