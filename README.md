@@ -100,8 +100,10 @@ Given the headers from a Hapi request object, `parseAll()` will parse all of the
 var all = Accept.parseAll(request.headers);
 // all === {
 //    "charsets": ["iso-8859-5", "unicode-1-1"],
-//    "encodings": ["gzip", "compress", "identity"]
-//}
+//    "encodings": ["gzip", "compress", "identity"],
+//    "languages": ["da", "en-gb", "en"],
+//    "mediaTypes": ["text/plain", "text/html", "application/json", "*/*"]
+// }
 ```
 
 
