@@ -10,6 +10,7 @@ Lead Maintainer - [Mark Bradshaw](https://github.com/mark-bradshaw)
 
 - [Introduction](#introduction)
 - [Usage](#usage)
+    - [`charset(charsetHeader, [preferences])`](#charsetcharsetheader-preferences)
     - [`charsets(charsetHeader)`](#charsetscharsetheader)
     - [`encoding(encodingHeader, [preferences])`](#encodingencodingheader-preferences)
     - [`encodings(encodingHeader)`](#encodingsencodingheader)
