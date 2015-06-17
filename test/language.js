@@ -18,7 +18,7 @@ var it = lab.it;
 var expect = Code.expect;
 
 
-// languages
+// language
 describe('language()', function() {
 
     it('parses the header', function(done) {
