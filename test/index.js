@@ -18,150 +18,27 @@ var it = lab.it;
 var expect = Code.expect;
 
 /*
-    Accept-Encoding: compress, gzip
-    Accept-Encoding:
-    Accept-Encoding: *
-    Accept-Encoding: compress;q=0.5, gzip;q=1.0
-    Accept-Encoding: gzip;q=1.0, identity; q=0.5, *;q=0
+    Accept-Charset: iso-8859-5, unicode-1-1;q=0.8
 */
 
-describe('encoding()', function () {
+describe('parseAll()', function () {
 
-    it('parses header', function (done) {
+    it('parses all Accept headers', function(done) {
 
-        var accept = Accept.encoding('gzip;q=1.0, identity; q=0.5, *;q=0');
-        expect(accept.isBoom).to.not.exist;
-        expect(accept).to.deep.equal('gzip');
-        done();
-    });
+        var headers = {};
+        headers['accept'] = 'text/plain, application/json;q=0.5, text/html, */*;q=0.1';
+        headers['accept-charset'] = 'iso-8859-5, unicode-1-1;q=0.8, *;q=0.001';
+        headers['accept-encoding'] = 'compress;q=0.5, gzip;q=1.0';
+        headers['accept-language'] = 'da, en;q=0.7, en-gb;q=0.8';
 
-    it('parses header with preferences', function (done) {
-
-        var accept = Accept.encoding('gzip;q=1.0, identity; q=0.5, *;q=0', ['identity', 'deflate', 'gzip']);
-        expect(accept.isBoom).to.not.exist;
-        expect(accept).to.deep.equal('gzip');
-        done();
-    });
-
-    it('parses header with preferences (case insensitive)', function (done) {
-
-        var accept = Accept.encoding('GZIP;q=1.0, identity; q=0.5, *;q=0', ['identity', 'deflate', 'gZip']);
-        expect(accept.isBoom).to.not.exist;
-        expect(accept).to.deep.equal('gzip');
-        done();
-    });
-
-    it('parses header with preferences (x-)', function (done) {
-
-        var accept = Accept.encoding('x-gzip;q=1.0, identity; q=0.5, *;q=0', ['identity', 'deflate', 'gzip']);
-        expect(accept.isBoom).to.not.exist;
-        expect(accept).to.deep.equal('gzip');
-        done();
-    });
-
-    it('parses header with preferences (secondary match)', function (done) {
-
-        var accept = Accept.encoding('gzip;q=1.0, identity; q=0.5, *;q=0', ['identity', 'deflate']);
-        expect(accept.isBoom).to.not.exist;
-        expect(accept).to.deep.equal('identity');
-        done();
-    });
-
-    it('parses header with preferences (no match)', function (done) {
-
-        var accept = Accept.encoding('gzip;q=1.0, identity; q=0.5, *;q=0', ['deflate']);
-        expect(accept.isBoom).to.not.exist;
-        expect(accept).to.equal('');
-        done();
-    });
-
-    it('returns top preference on *', function (done) {
-
-        var accept = Accept.encoding('*', ['gzip', 'deflate']);
-        expect(accept.isBoom).to.not.exist;
-        expect(accept).to.deep.equal('gzip');
-        done();
-    });
-
-    it('returns top preference on * (identity)', function (done) {
-
-        var accept = Accept.encoding('*', ['identity', 'gzip', 'deflate']);
-        expect(accept.isBoom).to.not.exist;
-        expect(accept).to.deep.equal('identity');
-        done();
-    });
-
-    it('returns identity on empty', function (done) {
-
-        var accept = Accept.encoding('');
-        expect(accept.isBoom).to.not.exist;
-        expect(accept).to.deep.equal('identity');
-        done();
-    });
-
-    it('returns none on empty with non identity preferences', function (done) {
-
-        var accept = Accept.encoding('', ['gzip', 'deflate']);
-        expect(accept.isBoom).to.not.exist;
-        expect(accept).to.deep.equal('');
-        done();
-    });
-
-    it('returns identity on undefined', function (done) {
-
-        var accept = Accept.encoding();
-        expect(accept.isBoom).to.not.exist;
-        expect(accept).to.deep.equal('identity');
-        done();
-    });
-
-    it('excludes q=0', function (done) {
-
-        var accept = Accept.encoding('compress;q=0.5, gzip;q=0.0', ['gzip', 'compress']);
-        expect(accept.isBoom).to.not.exist;
-        expect(accept).to.equal('compress');
-        done();
-    });
-
-    it('errors on invalid header', function (done) {
-
-        var accept = Accept.encoding('a;b');
-        expect(accept.isBoom).to.exist;
-        done();
-    });
-});
-
-describe('encodings()', function () {
-
-    it('parses header', function (done) {
-
-        var accept = Accept.encodings('gzip;q=1.0, identity; q=0.5, *;q=0');
-        expect(accept.isBoom).to.not.exist;
-        expect(accept).to.deep.equal(['gzip', 'identity']);
-        done();
-    });
-
-    it('parses header (reverse header)', function (done) {
-
-        var accept = Accept.encodings('compress;q=0.5, gzip;q=1.0');
-        expect(accept.isBoom).to.not.exist;
-        expect(accept).to.deep.equal(['gzip', 'compress', 'identity']);
-        done();
-    });
-
-    it('parses header (exclude encoding)', function (done) {
-
-        var accept = Accept.encodings('compress;q=0.5, gzip;q=0.0');
-        expect(accept.isBoom).to.not.exist;
-        expect(accept).to.deep.equal(['compress', 'identity']);
-        done();
-    });
-
-    it('parses header (exclude identity)', function (done) {
-
-        var accept = Accept.encodings('compress;q=0.5, gzip;q=1.0, identity;q=0');
-        expect(accept.isBoom).to.not.exist;
-        expect(accept).to.deep.equal(['gzip', 'compress']);
+        var accept = Accept.parseAll(headers);
+        expect(accept.isBoom).to.not.exist();
+        expect(accept).to.deep.equal({
+            charsets: ['iso-8859-5', 'unicode-1-1', '*'],
+            encodings: ['gzip', 'compress', 'identity'],
+            languages: ['da', 'en-gb', 'en'],
+            mediaTypes: ['text/plain', 'text/html', 'application/json', '*/*']
+        });
         done();
     });
 });
