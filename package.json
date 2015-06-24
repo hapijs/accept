@@ -3,7 +3,7 @@
   "description": "HTTP Accept-* headers parsing",
   "version": "1.0.0",
   "repository": "git://github.com/hapijs/accept",
-  "main": "index",
+  "main": "lib/index.js",
   "keywords": [
     "HTTP",
     "header",
@@ -22,12 +22,10 @@
     "lab": "5.x.x"
   },
   "scripts": {
-    "test": "make test-cov"
+    "test": "lab -a code -t 100",
+    "test-lint": "lab -a code -t 100 -L",
+    "test-tap": "lab -a code -r tap -o tests.tap",
+    "test-cov-html": "lab -a code -r html -o coverage.html"
   },
-  "licenses": [
-    {
-      "type": "BSD",
-      "url": "http://github.com/hapijs/accept/raw/master/LICENSE"
-    }
-  ]
+  "license": "BSD-3-Clause"
 }
