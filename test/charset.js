@@ -19,6 +19,7 @@ var expect = Code.expect;
 
 
 // Charset
+
 describe('charset()', function () {
 
     it('parses header', function (done) {
@@ -47,7 +48,7 @@ describe('charset()', function () {
             return done();
         }
 
-        // should not EVER get here.
+        // Should not EVER get here
         expect(true).to.equal(false);
         done();
     });
