@@ -1,8 +1,8 @@
 // Load modules
 
+var Accept = require('..');
 var Code = require('code');
 var Lab = require('lab');
-var Accept = require('..');
 
 
 // Declare internals
@@ -40,16 +40,10 @@ describe('charset()', function () {
 
     it('requires that preferences parameter must be an array', function (done) {
 
-        try {
-            var charset = Accept.charset('iso-8859-5; q=0.1, unicode-1-1;q=0.8, *;q=0.001', 'iso-8859-5');
-        }
-        catch (err) {
-            expect(err).to.exist();
-            return done();
-        }
+        expect(function () {
 
-        // Should not EVER get here
-        expect(true).to.equal(false);
+            Accept.charset('iso-8859-5; q=0.1, unicode-1-1;q=0.8, *;q=0.001', 'iso-8859-5');
+        }).to.throw('Preferences must be an array');
         done();
     });
 

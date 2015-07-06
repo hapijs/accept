@@ -45,15 +45,10 @@ describe('encoding()', function () {
 
     it('requires that preferences be an array', function (done) {
 
-        try {
-            var encoding = Accept.encoding('gzip;q=1.0, identity; q=0.5, *;q=0', 'identity, deflate');
-        }
-        catch (err) {
-            expect(err.message).to.equal('Preferences must be an array');
-            return done();
-        }
+        expect(function () {
 
-        expect(true).to.equal(false); // shouldn't get here.  If we did, there's a problem.
+            Accept.encoding('gzip;q=1.0, identity; q=0.5, *;q=0', 'identity, deflate');
+        }).to.throw('Preferences must be an array');
         done();
     });
 
