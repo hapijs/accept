@@ -10,6 +10,8 @@ Lead Maintainer - [Mark Bradshaw](https://github.com/mark-bradshaw)
 
 - [Introduction](#introduction)
 - [Usage](#usage)
+    - [`charset(charsetHeader, [preferences])`](#charsetcharsetheader-preferences)
+    - [`charsets(charsetHeader)`](#charsetscharsetheader)
     - [`encoding(encodingHeader, [preferences])`](#encodingencodingheader-preferences)
     - [`encodings(encodingHeader)`](#encodingsencodingheader)
 - [Q Weightings](#q-weightings)
@@ -19,11 +21,29 @@ Lead Maintainer - [Mark Bradshaw](https://github.com/mark-bradshaw)
 
 ## Introduction
 
-Accept helps to answer the question of how best to respond to a HTTP request, based on the requesting browser's capabilities.  Accept can parse the headers of a HTTP request and tell you what the preferred encoding is.
+Accept helps to answer the question of how best to respond to a HTTP request, based on the requesting browser's capabilities.  Accept will parse the headers of a HTTP request and tell you what the preferred encoding is and what charsets are accepted.
 
 Additional details about Accept headers and content negotiation can be found in [IETF RFC 7231, Section 5.3](https://tools.ietf.org/html/rfc7231#section-5.3).
 
 ## Usage
+
+### `charset(charsetHeader, [preferences])`
+
+Given a string of acceptable charsets from a HTTP request Accept-Charset header, and an optional array of charset preferences, it will return a string indicating the best charset option that can be used in the HTTP response.  This takes into account any weighting parameters given in the header for ordering and exclusion.
+
+```
+var charset = Accept.charsets("iso-8859-5, unicode-1-1;q=0.8"); // charset === "iso-8859-5"
+var charset = Accept.charsets("iso-8859-5, unicode-1-1;q=0.8", ["unicode-1-1"]); // charset === "unicode-1-1"
+```
+
+### `charsets(charsetHeader)`
+
+Given a string of acceptable charsets from a HTTP request Accept-Charset header it will return an array of strings indicating the possible charset options that can be used in the HTTP response, in order from most preferred to least as determined by the [q weightings](#weightings)
+
+```
+var charsets = Accept.charsets("iso-8859-5, unicode-1-1;q=0.8"); // charsets === ["iso-8859-5", "unicode-1-1"]
+var charsets = Accept.charsets("iso-8859-5;q=0.5, unicode-1-1;q=0.8"); // charsets === ["unicode-1-1", "iso-8859-5"]
+```
 
 ### `encoding(encodingHeader, [preferences])`
 
@@ -41,6 +61,7 @@ Given a string of acceptable encodings from a HTTP request Accept-Encoding heade
 ```
 var encodings = Accept.encodings("compress;q=0.5, gzip;q=1.0"); // encodings === ["gzip", "compress", "identity"]
 ```
+
 
 ## Q Weightings
 
