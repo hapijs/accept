@@ -1,10 +1,10 @@
 #Accept
 
-[![Join the chat at https://gitter.im/hapijs/accept](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hapijs/accept?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 HTTP Accept-* headers parsing.
 
 [![Build Status](https://secure.travis-ci.org/hapijs/accept.png)](http://travis-ci.org/hapijs/accept)
+
+[![Join the chat at https://gitter.im/hapijs/accept](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hapijs/accept?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
 Lead Maintainer - [Mark Bradshaw](https://github.com/mark-bradshaw)
 
