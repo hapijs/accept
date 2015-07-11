@@ -18,7 +18,6 @@ var it = lab.it;
 var expect = Code.expect;
 
 
-// language
 describe('language()', function () {
 
     it('parses the header', function (done) {
@@ -155,7 +154,6 @@ describe('languages()', function () {
     });
 
     it('return empty array when header is empty', function (done) {
-
 
         var languages = Accept.languages('');
         expect(languages).to.deep.equal([]);
