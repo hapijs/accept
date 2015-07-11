@@ -1,8 +1,8 @@
 // Load modules
 
+var Accept = require('..');
 var Code = require('code');
 var Lab = require('lab');
-var Accept = require('..');
 
 
 // Declare internals
