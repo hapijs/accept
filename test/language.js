@@ -108,7 +108,6 @@ describe('language()', function () {
 });
 
 
-// languages
 describe('languages()', function () {
 
     it('parses the header', function (done) {
