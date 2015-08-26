@@ -18,6 +18,8 @@ Lead Maintainer - [Mark Bradshaw](https://github.com/mark-bradshaw)
     - [`encodings(encodingHeader)`](#encodingsencodingheader)
     - [`language(languageHeader, [preferences])`](#languagelanguageheader-preferences)
     - [`languages(languageHeader)`](#languageslanguageheader)
+    - [`mediaTypes(mediaTypeHeader)`](#mediatypesmediatypeheader)
+    - [`parseAll(headers)`](#parseallheaders)
 - [Q Weightings](#q-weightings)
 - [Encodings](#encodings)
     - [Preferences](#preferences)
@@ -83,6 +85,29 @@ Given a string of acceptable languages from a HTTP request Accept-Language heade
 
 ```
 var languages = Accept.languages("da, en;q=0.7, en-GB;q=0.8"); // languages === ["da", "en-GB", "en"]
+```
+
+### `mediaTypes(mediaTypeHeader)`
+
+Given a string of acceptable media types from a HTTP request Accept header it will return an array of strings indicating the possible media types that can be used in the HTTP response, in order from most preferred to least as determined by the [q weightings](#weightings).
+
+```
+var mediaTypes = Accept.mediaTypes("text/plain, application/json;q=0.5, text/html, */*;q=0.1");
+// mediaTypes === ["text/plain", "text/html", "application/json", "*/*"]
+```
+
+### `parseAll(headers)`
+
+Given the headers from a Hapi request object, `parseAll()` will parse all of the Accepts-* headers it currently understands into an object.
+
+```
+var all = Accept.parseAll(request.headers);
+// all === {
+//    "charsets": ["iso-8859-5", "unicode-1-1"],
+//    "encodings": ["gzip", "compress", "identity"],
+//    "languages": ["da", "en-gb", "en"],
+//    "mediaTypes": ["text/plain", "text/html", "application/json", "*/*"]
+// }
 ```
 
 
