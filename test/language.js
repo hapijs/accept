@@ -1,160 +1,162 @@
+'use strict';
+
 // Load modules
 
-var Accept = require('..');
-var Code = require('code');
-var Lab = require('lab');
+const Accept = require('..');
+const Code = require('code');
+const Lab = require('lab');
 
 
 // Declare internals
 
-var internals = {};
+const internals = {};
 
 
 // Test shortcuts
 
-var lab = exports.lab = Lab.script();
-var describe = lab.describe;
-var it = lab.it;
-var expect = Code.expect;
+const lab = exports.lab = Lab.script();
+const describe = lab.describe;
+const it = lab.it;
+const expect = Code.expect;
 
 
-describe('language()', function () {
+describe('language()', () => {
 
-    it('parses the header', function (done) {
+    it('parses the header', (done) => {
 
-        var language = Accept.language('da, en-GB, en');
+        const language = Accept.language('da, en-GB, en');
         expect(language).to.equal('da');
         done();
     });
 
-    it('respects weights', function (done) {
+    it('respects weights', (done) => {
 
-        var language = Accept.language('en;q=0.6, en-GB;q=0.8');
+        const language = Accept.language('en;q=0.6, en-GB;q=0.8');
         expect(language).to.equal('en-GB');
         done();
     });
 
-    it('requires the preferences parameter to be an array', function (done) {
+    it('requires the preferences parameter to be an array', (done) => {
 
-        expect(function () {
+        expect(() => {
 
             Accept.language('en;q=0.6, en-GB;q=0.8', 'en');
         }).to.throw('Preferences must be an array');
         done();
     });
 
-    it('returns empty string with header is empty', function (done) {
+    it('returns empty string with header is empty', (done) => {
 
-        var language = Accept.language('');
+        const language = Accept.language('');
         expect(language).to.equal('');
         done();
     });
 
-    it('returns empty string if header is missing', function (done) {
+    it('returns empty string if header is missing', (done) => {
 
-        var language = Accept.language();
+        const language = Accept.language();
         expect(language).to.equal('');
         done();
     });
 
-    it('ignores an empty preferences array', function (done) {
+    it('ignores an empty preferences array', (done) => {
 
-        var language = Accept.language('da, en-GB, en', []);
+        const language = Accept.language('da, en-GB, en', []);
         expect(language).to.equal('da');
         done();
     });
 
-    it('returns empty string if none of the preferences match', function (done) {
+    it('returns empty string if none of the preferences match', (done) => {
 
-        var language = Accept.language('da, en-GB, en', ['es']);
+        const language = Accept.language('da, en-GB, en', ['es']);
         expect(language).to.equal('');
         done();
     });
 
-    it('returns first preference if header has *', function (done) {
+    it('returns first preference if header has *', (done) => {
 
-        var language = Accept.language('da, en-GB, en, *', ['en-US']);
+        const language = Accept.language('da, en-GB, en, *', ['en-US']);
         expect(language).to.equal('en-US');
         done();
     });
 
-    it('returns first found preference that header includes', function (done) {
+    it('returns first found preference that header includes', (done) => {
 
-        var language = Accept.language('da, en-GB, en', ['en-US', 'en-GB']);
+        const language = Accept.language('da, en-GB, en', ['en-US', 'en-GB']);
         expect(language).to.equal('en-GB');
         done();
     });
 
-    it('returns preference with highest specificity', function (done) {
+    it('returns preference with highest specificity', (done) => {
 
-        var language = Accept.language('da, en-GB, en', ['en', 'en-GB']);
+        const language = Accept.language('da, en-GB, en', ['en', 'en-GB']);
         expect(language).to.equal('en-GB');
         done();
     });
 
-    it('return language with heighest weight', function (done) {
+    it('return language with heighest weight', (done) => {
 
-        var language = Accept.language('da;q=0.5, en;q=1', ['da', 'en']);
+        const language = Accept.language('da;q=0.5, en;q=1', ['da', 'en']);
         expect(language).to.equal('en');
         done();
     });
 
-    it('ignores preference case when matching', function (done) {
+    it('ignores preference case when matching', (done) => {
 
-        var language = Accept.language('da, en-GB, en', ['en-us', 'en-gb']); // en-GB vs en-gb
+        const language = Accept.language('da, en-GB, en', ['en-us', 'en-gb']); // en-GB vs en-gb
         expect(language).to.equal('en-GB');
         done();
     });
 });
 
 
-describe('languages()', function () {
+describe('languages()', () => {
 
-    it('parses the header', function (done) {
+    it('parses the header', (done) => {
 
-        var languages = Accept.languages('da, en-GB, en');
+        const languages = Accept.languages('da, en-GB, en');
         expect(languages).to.deep.equal(['da', 'en-GB', 'en']);
         done();
     });
 
-    it('orders by weight(q)', function (done) {
+    it('orders by weight(q)', (done) => {
 
-        var languages = Accept.languages('da, en;q=0.7, en-GB;q=0.8');
+        const languages = Accept.languages('da, en;q=0.7, en-GB;q=0.8');
         expect(languages).to.deep.equal(['da', 'en-GB', 'en']);
         done();
     });
 
-    it('maintains case', function (done) {
+    it('maintains case', (done) => {
 
-        var languages = Accept.languages('da, en-GB, en');
+        const languages = Accept.languages('da, en-GB, en');
         expect(languages).to.deep.equal(['da', 'en-GB', 'en']);
         done();
     });
 
-    it('drops zero weighted charsets', function (done) {
+    it('drops zero weighted charsets', (done) => {
 
-        var languages = Accept.languages('da, en-GB, es;q=0, en');
+        const languages = Accept.languages('da, en-GB, es;q=0, en');
         expect(languages).to.deep.equal(['da', 'en-GB', 'en']);
         done();
     });
 
-    it('ignores invalid weights', function (done) {
+    it('ignores invalid weights', (done) => {
 
-        var languages = Accept.languages('da, en-GB;q=1.1, es;q=a, en;q=0.0001');
+        const languages = Accept.languages('da, en-GB;q=1.1, es;q=a, en;q=0.0001');
         expect(languages).to.deep.equal(['da', 'en-GB', 'es', 'en']);
         done();
     });
 
-    it('return empty array when no header is present', function (done) {
+    it('return empty array when no header is present', (done) => {
 
-        var languages = Accept.languages();
+        const languages = Accept.languages();
         expect(languages).to.deep.equal([]);
         done();
     });
 
-    it('return empty array when header is empty', function (done) {
+    it('return empty array when header is empty', (done) => {
 
-        var languages = Accept.languages('');
+        const languages = Accept.languages('');
         expect(languages).to.deep.equal([]);
         done();
     });

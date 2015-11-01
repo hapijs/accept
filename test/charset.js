@@ -1,111 +1,113 @@
+'use strict';
+
 // Load modules
 
-var Accept = require('..');
-var Code = require('code');
-var Lab = require('lab');
+const Accept = require('..');
+const Code = require('code');
+const Lab = require('lab');
 
 
 // Declare internals
 
-var internals = {};
+const internals = {};
 
 
 // Test shortcuts
 
-var lab = exports.lab = Lab.script();
-var describe = lab.describe;
-var it = lab.it;
-var expect = Code.expect;
+const lab = exports.lab = Lab.script();
+const describe = lab.describe;
+const it = lab.it;
+const expect = Code.expect;
 
 
 // Charset
 
-describe('charset()', function () {
+describe('charset()', () => {
 
-    it('parses header', function (done) {
+    it('parses header', (done) => {
 
-        var charset = Accept.charset('iso-8859-5, unicode-1-1;q=0.8, *;q=0.001');
+        const charset = Accept.charset('iso-8859-5, unicode-1-1;q=0.8, *;q=0.001');
         expect(charset.isBoom).to.not.exist();
         expect(charset).to.equal('iso-8859-5');
         done();
     });
 
-    it('respects weights', function (done) {
+    it('respects weights', (done) => {
 
-        var charset = Accept.charset('iso-8859-5; q=0.1, unicode-1-1;q=0.8, *;q=0.001');
+        const charset = Accept.charset('iso-8859-5; q=0.1, unicode-1-1;q=0.8, *;q=0.001');
         expect(charset.isBoom).to.not.exist();
         expect(charset).to.equal('unicode-1-1');
         done();
     });
 
-    it('requires that preferences parameter must be an array', function (done) {
+    it('requires that preferences parameter must be an array', (done) => {
 
-        expect(function () {
+        expect(() => {
 
             Accept.charset('iso-8859-5; q=0.1, unicode-1-1;q=0.8, *;q=0.001', 'iso-8859-5');
         }).to.throw('Preferences must be an array');
         done();
     });
 
-    it('returns empty string when there are no charsets', function (done) {
+    it('returns empty string when there are no charsets', (done) => {
 
-        var charset = Accept.charset('*;q=0');
+        const charset = Accept.charset('*;q=0');
         expect(charset.isBoom).to.not.exist();
         expect(charset).to.equal('');
         done();
     });
 
-    it('returns first charset when preferences array is empty', function (done) {
+    it('returns first charset when preferences array is empty', (done) => {
 
-        var charset = Accept.charset('iso-8859-5; q=0.1, unicode-1-1;q=0.8, *;q=0.001', []);
+        const charset = Accept.charset('iso-8859-5; q=0.1, unicode-1-1;q=0.8, *;q=0.001', []);
         expect(charset.isBoom).to.not.exist();
         expect(charset).to.equal('unicode-1-1');
         done();
     });
 
-    it('looks for top preference', function (done) {
+    it('looks for top preference', (done) => {
 
-        var charset = Accept.charset('iso-8859-5; q=0.1, unicode-1-1;q=0.8, *;q=0.001', ['iso-8859-5']);
+        const charset = Accept.charset('iso-8859-5; q=0.1, unicode-1-1;q=0.8, *;q=0.001', ['iso-8859-5']);
         expect(charset.isBoom).to.not.exist();
         expect(charset).to.equal('iso-8859-5');
         done();
     });
 
-    it('find anything in preferences', function (done) {
+    it('find anything in preferences', (done) => {
 
-        var charset = Accept.charset('iso-8859-5; q=0.1, unicode-1-1;q=0.8', ['utf-8', 'iso-8859-5']);
+        const charset = Accept.charset('iso-8859-5; q=0.1, unicode-1-1;q=0.8', ['utf-8', 'iso-8859-5']);
         expect(charset.isBoom).to.not.exist();
         expect(charset).to.equal('iso-8859-5');
         done();
     });
 
-    it('returns empty string if no preference match is found', function (done) {
+    it('returns empty string if no preference match is found', (done) => {
 
-        var charset = Accept.charset('iso-8859-5; q=0.1, unicode-1-1;q=0.8', ['utf-8']);
+        const charset = Accept.charset('iso-8859-5; q=0.1, unicode-1-1;q=0.8', ['utf-8']);
         expect(charset.isBoom).to.not.exist();
         expect(charset).to.equal('');
         done();
     });
 
-    it('accepts any charset preference with *', function (done) {
+    it('accepts any charset preference with *', (done) => {
 
-        var charset = Accept.charset('*;q=0.001', ['utf-8']);
+        const charset = Accept.charset('*;q=0.001', ['utf-8']);
         expect(charset.isBoom).to.not.exist();
         expect(charset).to.equal('utf-8');
         done();
     });
 
-    it('ignores preference case', function (done) {
+    it('ignores preference case', (done) => {
 
-        var charset = Accept.charset('UTF-8', ['utf-8']);
+        const charset = Accept.charset('UTF-8', ['utf-8']);
         expect(charset.isBoom).to.not.exist();
         expect(charset).to.equal('UTF-8');
         done();
     });
 
-    it('obeys disallow with wildcard', function (done) {
+    it('obeys disallow with wildcard', (done) => {
 
-        var charset = Accept.charset('*, not-this;q=0, UTF-8;q=0', ['utf-8', 'iso-8859-5']); // utf-8 is disallowed
+        const charset = Accept.charset('*, not-this;q=0, UTF-8;q=0', ['utf-8', 'iso-8859-5']); // utf-8 is disallowed
         expect(charset.isBoom).to.not.exist();
         expect(charset).to.equal('iso-8859-5');
         done();
@@ -114,59 +116,59 @@ describe('charset()', function () {
 
 
 // Charsets
-describe('charsets()', function () {
+describe('charsets()', () => {
 
-    it('parses header', function (done) {
+    it('parses header', (done) => {
 
-        var charsets = Accept.charsets('iso-8859-5, unicode-1-1;q=0.8, *;q=0.001');
+        const charsets = Accept.charsets('iso-8859-5, unicode-1-1;q=0.8, *;q=0.001');
         expect(charsets.isBoom).to.not.exist();
         expect(charsets).to.deep.equal(['iso-8859-5', 'unicode-1-1', '*']);
         done();
     });
 
-    it('orders by weight(q)', function (done) {
+    it('orders by weight(q)', (done) => {
 
-        var charsets = Accept.charsets('iso-8859-5;q=0.5, unicode-1-1;q=0.8');
+        const charsets = Accept.charsets('iso-8859-5;q=0.5, unicode-1-1;q=0.8');
         expect(charsets.isBoom).to.not.exist();
         expect(charsets).to.deep.equal(['unicode-1-1', 'iso-8859-5']);
         done();
     });
 
-    it('ignores case', function (done) {
+    it('ignores case', (done) => {
 
-        var charsets = Accept.charsets('ISO-8859-5, uNIcode-1-1;q=0.8, *;q=0.001');
+        const charsets = Accept.charsets('ISO-8859-5, uNIcode-1-1;q=0.8, *;q=0.001');
         expect(charsets.isBoom).to.not.exist();
         expect(charsets).to.deep.equal(['iso-8859-5', 'unicode-1-1', '*']);
         done();
     });
 
-    it('drops zero weighted charsets', function (done) {
+    it('drops zero weighted charsets', (done) => {
 
-        var charsets = Accept.charsets('iso-8859-5, unicode-1-1;q=0.8, drop-me;q=0');
+        const charsets = Accept.charsets('iso-8859-5, unicode-1-1;q=0.8, drop-me;q=0');
         expect(charsets.isBoom).to.not.exist();
         expect(charsets).to.deep.equal(['iso-8859-5', 'unicode-1-1']);
         done();
     });
 
-    it('ignores invalid weights', function (done) {
+    it('ignores invalid weights', (done) => {
 
-        var charsets = Accept.charsets('too-low;q=0.0001, unicode-1-1;q=0.8, too-high;q=1.1, letter-weight;q=a');
+        const charsets = Accept.charsets('too-low;q=0.0001, unicode-1-1;q=0.8, too-high;q=1.1, letter-weight;q=a');
         expect(charsets.isBoom).to.not.exist();
         expect(charsets).to.deep.equal(['too-low', 'too-high', 'letter-weight', 'unicode-1-1']);
         done();
     });
 
-    it('return empty array when no header is present', function (done) {
+    it('return empty array when no header is present', (done) => {
 
-        var charsets = Accept.charsets();
+        const charsets = Accept.charsets();
         expect(charsets.isBoom).to.not.exist();
         expect(charsets).to.deep.equal([]);
         done();
     });
 
-    it('return empty array when header is empty', function (done) {
+    it('return empty array when header is empty', (done) => {
 
-        var charsets = Accept.charsets('');
+        const charsets = Accept.charsets('');
         expect(charsets.isBoom).to.not.exist();
         expect(charsets).to.deep.equal([]);
         done();
