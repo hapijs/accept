@@ -4,8 +4,6 @@ HTTP Accept-* headers parsing.
 
 [![npm version](https://badge.fury.io/js/accept.svg)](http://badge.fury.io/js/accept) [![Build Status](https://secure.travis-ci.org/hapijs/accept.png)](http://travis-ci.org/hapijs/accept) [![Dependency Status](https://david-dm.org/hapijs/accept.svg)](https://david-dm.org/hapijs/accept)
 
-[![Join the chat at https://gitter.im/hapijs/accept](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/hapijs/accept?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-
 Lead Maintainer - [Mark Bradshaw](https://github.com/mark-bradshaw)
 
 ## Introduction
