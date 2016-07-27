@@ -33,7 +33,7 @@ describe('encoding()', () => {
 
         const encoding = Accept.encoding('gzip;q=1.0, identity; q=0.5, *;q=0');
         expect(encoding.isBoom).to.not.exist();
-        expect(encoding).to.deep.equal('gzip');
+        expect(encoding).to.equal('gzip');
         done();
     });
 
@@ -41,7 +41,7 @@ describe('encoding()', () => {
 
         const encoding = Accept.encoding('gzip;q=0.001, identity; q=0.05, *;q=0');
         expect(encoding.isBoom).to.not.exist();
-        expect(encoding).to.deep.equal('identity');
+        expect(encoding).to.equal('identity');
         done();
     });
 
@@ -58,7 +58,7 @@ describe('encoding()', () => {
 
         const encoding = Accept.encoding('gzip;q=1.0, identity; q=0.5, *;q=0', ['identity', 'deflate', 'gzip']);
         expect(encoding.isBoom).to.not.exist();
-        expect(encoding).to.deep.equal('gzip');
+        expect(encoding).to.equal('gzip');
         done();
     });
 
@@ -66,7 +66,7 @@ describe('encoding()', () => {
 
         const encoding = Accept.encoding('GZIP;q=1.0, identity; q=0.5, *;q=0', ['identity', 'deflate', 'gZip']);
         expect(encoding.isBoom).to.not.exist();
-        expect(encoding).to.deep.equal('gzip');
+        expect(encoding).to.equal('gzip');
         done();
     });
 
@@ -74,7 +74,7 @@ describe('encoding()', () => {
 
         const encoding = Accept.encoding('x-gzip;q=1.0, identity; q=0.5, *;q=0', ['identity', 'deflate', 'gzip']);
         expect(encoding.isBoom).to.not.exist();
-        expect(encoding).to.deep.equal('gzip');
+        expect(encoding).to.equal('gzip');
         done();
     });
 
@@ -82,7 +82,7 @@ describe('encoding()', () => {
 
         const encoding = Accept.encoding('gzip;q=1.0, identity; q=0.5, *;q=0', ['identity', 'deflate']);
         expect(encoding.isBoom).to.not.exist();
-        expect(encoding).to.deep.equal('identity');
+        expect(encoding).to.equal('identity');
         done();
     });
 
@@ -98,7 +98,7 @@ describe('encoding()', () => {
 
         const encoding = Accept.encoding('*', ['gzip', 'deflate']);
         expect(encoding.isBoom).to.not.exist();
-        expect(encoding).to.deep.equal('gzip');
+        expect(encoding).to.equal('gzip');
         done();
     });
 
@@ -106,7 +106,7 @@ describe('encoding()', () => {
 
         const encoding = Accept.encoding('*', ['identity', 'gzip', 'deflate']);
         expect(encoding.isBoom).to.not.exist();
-        expect(encoding).to.deep.equal('identity');
+        expect(encoding).to.equal('identity');
         done();
     });
 
@@ -114,7 +114,7 @@ describe('encoding()', () => {
 
         const encoding = Accept.encoding('');
         expect(encoding.isBoom).to.not.exist();
-        expect(encoding).to.deep.equal('identity');
+        expect(encoding).to.equal('identity');
         done();
     });
 
@@ -122,7 +122,7 @@ describe('encoding()', () => {
 
         const encoding = Accept.encoding('', ['gzip', 'deflate']);
         expect(encoding.isBoom).to.not.exist();
-        expect(encoding).to.deep.equal('');
+        expect(encoding).to.equal('');
         done();
     });
 
@@ -130,7 +130,7 @@ describe('encoding()', () => {
 
         const encoding = Accept.encoding();
         expect(encoding.isBoom).to.not.exist();
-        expect(encoding).to.deep.equal('identity');
+        expect(encoding).to.equal('identity');
         done();
     });
 
@@ -146,7 +146,7 @@ describe('encoding()', () => {
 
         const encoding = Accept.encoding('gzip;q=0.01, identity; q=0.5, deflate;q=1.1, *;q=0');
         expect(encoding.isBoom).to.not.exist();
-        expect(encoding).to.deep.equal('deflate');
+        expect(encoding).to.equal('deflate');
         done();
     });
 
@@ -172,7 +172,7 @@ describe('encodings()', () => {
 
         const encodings = Accept.encodings('gzip;q=1.0, identity; q=0.5, *;q=0');
         expect(encodings.isBoom).to.not.exist();
-        expect(encodings).to.deep.equal(['gzip', 'identity']);
+        expect(encodings).to.equal(['gzip', 'identity']);
         done();
     });
 
@@ -180,7 +180,7 @@ describe('encodings()', () => {
 
         const encodings = Accept.encodings('compress;q=0.5, gzip;q=1.0');
         expect(encodings.isBoom).to.not.exist();
-        expect(encodings).to.deep.equal(['gzip', 'compress', 'identity']);
+        expect(encodings).to.equal(['gzip', 'compress', 'identity']);
         done();
     });
 
@@ -188,7 +188,7 @@ describe('encodings()', () => {
 
         const encodings = Accept.encodings('compress;q=0.5, gzip;q=0.0');
         expect(encodings.isBoom).to.not.exist();
-        expect(encodings).to.deep.equal(['compress', 'identity']);
+        expect(encodings).to.equal(['compress', 'identity']);
         done();
     });
 
@@ -196,7 +196,7 @@ describe('encodings()', () => {
 
         const encodings = Accept.encodings('compress;q=0.5, gzip;q=1.0, identity;q=0');
         expect(encodings.isBoom).to.not.exist();
-        expect(encodings).to.deep.equal(['gzip', 'compress']);
+        expect(encodings).to.equal(['gzip', 'compress']);
         done();
     });
 });

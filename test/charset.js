@@ -122,7 +122,7 @@ describe('charsets()', () => {
 
         const charsets = Accept.charsets('iso-8859-5, unicode-1-1;q=0.8, *;q=0.001');
         expect(charsets.isBoom).to.not.exist();
-        expect(charsets).to.deep.equal(['iso-8859-5', 'unicode-1-1', '*']);
+        expect(charsets).to.equal(['iso-8859-5', 'unicode-1-1', '*']);
         done();
     });
 
@@ -130,7 +130,7 @@ describe('charsets()', () => {
 
         const charsets = Accept.charsets('iso-8859-5;q=0.5, unicode-1-1;q=0.8');
         expect(charsets.isBoom).to.not.exist();
-        expect(charsets).to.deep.equal(['unicode-1-1', 'iso-8859-5']);
+        expect(charsets).to.equal(['unicode-1-1', 'iso-8859-5']);
         done();
     });
 
@@ -138,7 +138,7 @@ describe('charsets()', () => {
 
         const charsets = Accept.charsets('ISO-8859-5, uNIcode-1-1;q=0.8, *;q=0.001');
         expect(charsets.isBoom).to.not.exist();
-        expect(charsets).to.deep.equal(['iso-8859-5', 'unicode-1-1', '*']);
+        expect(charsets).to.equal(['iso-8859-5', 'unicode-1-1', '*']);
         done();
     });
 
@@ -146,7 +146,7 @@ describe('charsets()', () => {
 
         const charsets = Accept.charsets('iso-8859-5, unicode-1-1;q=0.8, drop-me;q=0');
         expect(charsets.isBoom).to.not.exist();
-        expect(charsets).to.deep.equal(['iso-8859-5', 'unicode-1-1']);
+        expect(charsets).to.equal(['iso-8859-5', 'unicode-1-1']);
         done();
     });
 
@@ -154,7 +154,7 @@ describe('charsets()', () => {
 
         const charsets = Accept.charsets('too-low;q=0.0001, unicode-1-1;q=0.8, too-high;q=1.1, letter-weight;q=a');
         expect(charsets.isBoom).to.not.exist();
-        expect(charsets).to.deep.equal(['too-low', 'too-high', 'letter-weight', 'unicode-1-1']);
+        expect(charsets).to.equal(['too-low', 'too-high', 'letter-weight', 'unicode-1-1']);
         done();
     });
 
@@ -162,7 +162,7 @@ describe('charsets()', () => {
 
         const charsets = Accept.charsets();
         expect(charsets.isBoom).to.not.exist();
-        expect(charsets).to.deep.equal([]);
+        expect(charsets).to.equal([]);
         done();
     });
 
@@ -170,7 +170,7 @@ describe('charsets()', () => {
 
         const charsets = Accept.charsets('');
         expect(charsets.isBoom).to.not.exist();
-        expect(charsets).to.deep.equal([]);
+        expect(charsets).to.equal([]);
         done();
     });
 });

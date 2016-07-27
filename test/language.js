@@ -115,49 +115,49 @@ describe('languages()', () => {
     it('parses the header', (done) => {
 
         const languages = Accept.languages('da, en-GB, en');
-        expect(languages).to.deep.equal(['da', 'en-GB', 'en']);
+        expect(languages).to.equal(['da', 'en-GB', 'en']);
         done();
     });
 
     it('orders by weight(q)', (done) => {
 
         const languages = Accept.languages('da, en;q=0.7, en-GB;q=0.8');
-        expect(languages).to.deep.equal(['da', 'en-GB', 'en']);
+        expect(languages).to.equal(['da', 'en-GB', 'en']);
         done();
     });
 
     it('maintains case', (done) => {
 
         const languages = Accept.languages('da, en-GB, en');
-        expect(languages).to.deep.equal(['da', 'en-GB', 'en']);
+        expect(languages).to.equal(['da', 'en-GB', 'en']);
         done();
     });
 
     it('drops zero weighted charsets', (done) => {
 
         const languages = Accept.languages('da, en-GB, es;q=0, en');
-        expect(languages).to.deep.equal(['da', 'en-GB', 'en']);
+        expect(languages).to.equal(['da', 'en-GB', 'en']);
         done();
     });
 
     it('ignores invalid weights', (done) => {
 
         const languages = Accept.languages('da, en-GB;q=1.1, es;q=a, en;q=0.0001');
-        expect(languages).to.deep.equal(['da', 'en-GB', 'es', 'en']);
+        expect(languages).to.equal(['da', 'en-GB', 'es', 'en']);
         done();
     });
 
     it('return empty array when no header is present', (done) => {
 
         const languages = Accept.languages();
-        expect(languages).to.deep.equal([]);
+        expect(languages).to.equal([]);
         done();
     });
 
     it('return empty array when header is empty', (done) => {
 
         const languages = Accept.languages('');
-        expect(languages).to.deep.equal([]);
+        expect(languages).to.equal([]);
         done();
     });
 });

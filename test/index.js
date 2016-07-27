@@ -35,7 +35,7 @@ describe('parseAll()', () => {
 
         const accept = Accept.parseAll(headers);
         expect(accept.isBoom).to.not.exist();
-        expect(accept).to.deep.equal({
+        expect(accept).to.equal({
             charsets: ['iso-8859-5', 'unicode-1-1', '*'],
             encodings: ['gzip', 'compress', 'identity'],
             languages: ['da', 'en-gb', 'en'],
