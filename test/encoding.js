@@ -14,9 +14,7 @@ const internals = {};
 
 // Test shortcuts
 
-const lab = exports.lab = Lab.script();
-const describe = lab.describe;
-const it = lab.it;
+const { describe, it } = exports.lab = Lab.script();
 const expect = Code.expect;
 
 /*
@@ -29,174 +27,133 @@ const expect = Code.expect;
 
 describe('encoding()', () => {
 
-    it('parses header', (done) => {
+    it('parses header', async () => {
 
         const encoding = Accept.encoding('gzip;q=1.0, identity; q=0.5, *;q=0');
-        expect(encoding.isBoom).to.not.exist();
         expect(encoding).to.equal('gzip');
-        done();
     });
 
-    it('parses header with weightings', (done) => {
+    it('parses header with weightings', async () => {
 
         const encoding = Accept.encoding('gzip;q=0.001, identity; q=0.05, *;q=0');
-        expect(encoding.isBoom).to.not.exist();
         expect(encoding).to.equal('identity');
-        done();
     });
 
-    it('requires that preferences be an array', (done) => {
+    it('requires that preferences be an array', async () => {
 
         expect(() => {
 
             Accept.encoding('gzip;q=1.0, identity; q=0.5, *;q=0', 'identity, deflate');
         }).to.throw('Preferences must be an array');
-        done();
     });
 
-    it('parses header with preferences', (done) => {
+    it('parses header with preferences', async () => {
 
         const encoding = Accept.encoding('gzip;q=1.0, identity; q=0.5, *;q=0', ['identity', 'deflate', 'gzip']);
-        expect(encoding.isBoom).to.not.exist();
         expect(encoding).to.equal('gzip');
-        done();
     });
 
-    it('parses header with preferences (case insensitive)', (done) => {
+    it('parses header with preferences (case insensitive)', async () => {
 
         const encoding = Accept.encoding('GZIP;q=1.0, identity; q=0.5, *;q=0', ['identity', 'deflate', 'gZip']);
-        expect(encoding.isBoom).to.not.exist();
         expect(encoding).to.equal('gzip');
-        done();
     });
 
-    it('parses header with preferences (x-)', (done) => {
+    it('parses header with preferences (x-)', async () => {
 
         const encoding = Accept.encoding('x-gzip;q=1.0, identity; q=0.5, *;q=0', ['identity', 'deflate', 'gzip']);
-        expect(encoding.isBoom).to.not.exist();
         expect(encoding).to.equal('gzip');
-        done();
     });
 
-    it('parses header with preferences (secondary match)', (done) => {
+    it('parses header with preferences (secondary match)', async () => {
 
         const encoding = Accept.encoding('gzip;q=1.0, identity; q=0.5, *;q=0', ['identity', 'deflate']);
-        expect(encoding.isBoom).to.not.exist();
         expect(encoding).to.equal('identity');
-        done();
     });
 
-    it('parses header with preferences (no match)', (done) => {
+    it('parses header with preferences (no match)', async () => {
 
         const encoding = Accept.encoding('gzip;q=1.0, identity; q=0.5, *;q=0', ['deflate']);
-        expect(encoding.isBoom).to.not.exist();
         expect(encoding).to.equal('');
-        done();
     });
 
-    it('returns top preference on *', (done) => {
+    it('returns top preference on *', async () => {
 
         const encoding = Accept.encoding('*', ['gzip', 'deflate']);
-        expect(encoding.isBoom).to.not.exist();
         expect(encoding).to.equal('gzip');
-        done();
     });
 
-    it('returns top preference on * (identity)', (done) => {
+    it('returns top preference on * (identity)', async () => {
 
         const encoding = Accept.encoding('*', ['identity', 'gzip', 'deflate']);
-        expect(encoding.isBoom).to.not.exist();
         expect(encoding).to.equal('identity');
-        done();
     });
 
-    it('returns identity on empty', (done) => {
+    it('returns identity on empty', async () => {
 
         const encoding = Accept.encoding('');
-        expect(encoding.isBoom).to.not.exist();
         expect(encoding).to.equal('identity');
-        done();
     });
 
-    it('returns none on empty with non identity preferences', (done) => {
+    it('returns none on empty with non identity preferences', async () => {
 
         const encoding = Accept.encoding('', ['gzip', 'deflate']);
-        expect(encoding.isBoom).to.not.exist();
         expect(encoding).to.equal('');
-        done();
     });
 
-    it('returns identity on undefined without preference', (done) => {
+    it('returns identity on undefined without preference', async () => {
 
         const encoding = Accept.encoding();
-        expect(encoding.isBoom).to.not.exist();
         expect(encoding).to.equal('identity');
-        done();
     });
 
-    it('excludes q=0', (done) => {
+    it('excludes q=0', async () => {
 
         const encoding = Accept.encoding('compress;q=0.5, gzip;q=0.0', ['gzip', 'compress']);
-        expect(encoding.isBoom).to.not.exist();
         expect(encoding).to.equal('compress');
-        done();
     });
 
-    it('ignores improper weightings', (done) => {
+    it('ignores improper weightings', async () => {
 
         const encoding = Accept.encoding('gzip;q=0.01, identity; q=0.5, deflate;q=1.1, *;q=0');
-        expect(encoding.isBoom).to.not.exist();
         expect(encoding).to.equal('deflate');
-        done();
     });
 
-    it('errors on invalid header', (done) => {
+    it('errors on invalid header', async () => {
 
-        const encoding = Accept.encoding('a;b');
-        expect(encoding.isBoom).to.exist();
-        done();
+        expect(() => Accept.encoding('a;b')).to.throw();
     });
 
-    it('obeys disallow with wildcard', (done) => {
+    it('obeys disallow with wildcard', async () => {
 
         const encoding = Accept.encoding('*, gzip;q=0, deflate;q=1.1', ['gzip', 'deflate']); // gzip is disallowed
-        expect(encoding.isBoom).to.not.exist();
         expect(encoding).to.equal('deflate');
-        done();
     });
 });
 
 describe('encodings()', () => {
 
-    it('parses header', (done) => {
+    it('parses header', async () => {
 
         const encodings = Accept.encodings('gzip;q=1.0, identity; q=0.5, *;q=0');
-        expect(encodings.isBoom).to.not.exist();
         expect(encodings).to.equal(['gzip', 'identity']);
-        done();
     });
 
-    it('parses header (reverse header)', (done) => {
+    it('parses header (reverse header)', async () => {
 
         const encodings = Accept.encodings('compress;q=0.5, gzip;q=1.0');
-        expect(encodings.isBoom).to.not.exist();
         expect(encodings).to.equal(['gzip', 'compress', 'identity']);
-        done();
     });
 
-    it('parses header (exclude encodings)', (done) => {
+    it('parses header (exclude encodings)', async () => {
 
         const encodings = Accept.encodings('compress;q=0.5, gzip;q=0.0');
-        expect(encodings.isBoom).to.not.exist();
         expect(encodings).to.equal(['compress', 'identity']);
-        done();
     });
 
-    it('parses header (exclude identity)', (done) => {
+    it('parses header (exclude identity)', async () => {
 
         const encodings = Accept.encodings('compress;q=0.5, gzip;q=1.0, identity;q=0');
-        expect(encodings.isBoom).to.not.exist();
         expect(encodings).to.equal(['gzip', 'compress']);
-        done();
     });
 });

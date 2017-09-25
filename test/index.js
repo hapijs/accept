@@ -14,9 +14,7 @@ const internals = {};
 
 // Test shortcuts
 
-const lab = exports.lab = Lab.script();
-const describe = lab.describe;
-const it = lab.it;
+const { describe, it } = exports.lab = Lab.script();
 const expect = Code.expect;
 
 /*
@@ -25,7 +23,7 @@ const expect = Code.expect;
 
 describe('parseAll()', () => {
 
-    it('parses all Accept headers', (done) => {
+    it('parses all Accept headers', async () => {
 
         const headers = {};
         headers.accept = 'text/plain, application/json;q=0.5, text/html, */*;q=0.1';
@@ -41,6 +39,5 @@ describe('parseAll()', () => {
             languages: ['da', 'en-gb', 'en'],
             mediaTypes: ['text/plain', 'text/html', 'application/json', '*/*']
         });
-        done();
     });
 });
