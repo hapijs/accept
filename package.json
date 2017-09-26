@@ -1,7 +1,7 @@
 {
   "name": "accept",
   "description": "HTTP Accept-* headers parsing",
-  "version": "3.0.0",
+  "version": "3.0.1",
   "repository": "git://github.com/hapijs/accept",
   "main": "lib/index.js",
   "keywords": [
@@ -14,8 +14,8 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "boom": "5.x.x",
-    "hoek": "4.x.x"
+    "boom": "6.x.x",
+    "hoek": "5.x.x"
   },
   "devDependencies": {
     "code": "5.x.x",
