@@ -23,7 +23,7 @@ const expect = Code.expect;
 
 describe('parseAll()', () => {
 
-    it('parses all Accept headers', async () => {
+    it('parses all Accept headers', () => {
 
         const headers = {};
         headers.accept = 'text/plain, application/json;q=0.5, text/html, */*;q=0.1';
