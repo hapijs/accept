@@ -25,6 +25,27 @@ const expect = Code.expect;
     Accept-Encoding: gzip;q=1.0, identity; q=0.5, *;q=0
 */
 
+describe('encoding memoization', () => {
+
+    it('memoizes without preferences', () => {
+
+        const encoding1 = Accept.encoding('gzip;q=1.0, identity; q=0.5, *;q=0');
+        expect(encoding1).to.equal('gzip');
+
+        const encoding2 = Accept.encoding('gzip;q=1.0, identity; q=0.5, *;q=0');
+        expect(encoding2).to.equal('gzip');
+    });
+
+    it('memoizes with preferences', () => {
+
+        const encoding1 = Accept.encoding('gzip;q=1.0, identity; q=0.5, *;q=0', ['identity', 'deflate', 'gzip']);
+        expect(encoding1).to.equal('gzip');
+
+        const encoding2 = Accept.encoding('gzip;q=1.0, identity; q=0.5, *;q=0', ['identity', 'deflate', 'gzip']);
+        expect(encoding2).to.equal('gzip');
+    });
+});
+
 describe('encoding()', () => {
 
     it('parses header', () => {
