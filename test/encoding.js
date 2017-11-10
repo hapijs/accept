@@ -25,6 +25,33 @@ const expect = Code.expect;
     Accept-Encoding: gzip;q=1.0, identity; q=0.5, *;q=0
 */
 
+describe('encoding hardcoded responses', () => {
+
+    it('cache hit without preferences', () => {
+
+        const encoding1 = Accept.encoding('gzip, deflate');
+        expect(encoding1).to.equal('gzip');
+    });
+
+    it('cache hit with preferences', () => {
+
+        const encoding1 = Accept.encoding('gzip, deflate', ['identity', 'deflate', 'gzip']);
+        expect(encoding1).to.equal('deflate');
+    });
+
+    it('cache miss without preferences', () => {
+
+        const encoding1 = Accept.encoding('br, compress');
+        expect(encoding1).to.equal('br');
+    });
+
+    it('cache miss with preferences', () => {
+
+        const encoding1 = Accept.encoding('br, compress', ['identity', 'deflate', 'gzip']);
+        expect(encoding1).to.equal('identity');
+    });
+});
+
 describe('encoding()', () => {
 
     it('parses header', () => {
