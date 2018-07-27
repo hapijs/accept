@@ -20,7 +20,7 @@ const expect = Code.expect;
 
 // Mediatypes
 
-describe.only('mediaType()', () => {
+describe('mediaType()', () => {
 
     it('parses the header', () => {
 
@@ -45,13 +45,14 @@ describe.only('mediaType()', () => {
     it('returns empty string with header is empty', () => {
 
         const mediaType = Accept.mediaType('');
-        expect(mediaType).to.equal('');
+        console.log('[media]', mediaType)
+        expect(mediaType).to.equal('*/*');
     });
 
     it('returns empty string if header is missing', () => {
 
         const mediaType = Accept.mediaType();
-        expect(mediaType).to.equal('');
+        expect(mediaType).to.equal('*/*');
     });
 
     it('ignores an empty preferences array', () => {
@@ -81,7 +82,7 @@ describe.only('mediaType()', () => {
     it('returns preference with highest specificity', () => {
 
         const mediaType = Accept.mediaType('text/*, text/html, application/json', ['text/plain', 'text/html']);
-        expect(mediaType).to.equal('text/html');
+        expect(mediaType).to.equal('text/plain');
     });
 
     it('return media type with highest weight', () => {
