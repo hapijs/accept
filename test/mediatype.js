@@ -45,7 +45,6 @@ describe('mediaType()', () => {
     it('returns empty string with header is empty', () => {
 
         const mediaType = Accept.mediaType('');
-        console.log('[media]', mediaType)
         expect(mediaType).to.equal('*/*');
     });
 
