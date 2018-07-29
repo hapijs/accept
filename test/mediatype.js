@@ -70,7 +70,7 @@ describe('mediaTypes()', () => {
         expect(mediaTypes).to.equal(['text/html;level=1', 'text/html;level=2']);
     });
 
-    it('invalid header returns */*', () => {
+    it('invalid header returns []', () => {
 
         const mediaTypes = Accept.mediaTypes('ab');
         expect(mediaTypes).to.equal([]);
