@@ -42,13 +42,13 @@ describe('mediaType()', () => {
         }).to.throw('Preferences must be an array');
     });
 
-    it('returns empty string with header is empty', () => {
+    it('returns */* with header is empty', () => {
 
         const mediaType = Accept.mediaType('');
         expect(mediaType).to.equal('*/*');
     });
 
-    it('returns empty string if header is missing', () => {
+    it('returns */* if header is missing', () => {
 
         const mediaType = Accept.mediaType();
         expect(mediaType).to.equal('*/*');
