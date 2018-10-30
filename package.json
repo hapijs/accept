@@ -1,7 +1,7 @@
 {
   "name": "accept",
   "description": "HTTP Accept-* headers parsing",
-  "version": "3.0.2",
+  "version": "3.1.0",
   "repository": "git://github.com/hapijs/accept",
   "main": "lib/index.js",
   "keywords": [
