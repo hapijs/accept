@@ -20,6 +20,78 @@ const expect = Code.expect;
 
 // Mediatypes
 
+describe('mediaType()', () => {
+
+    it('parses the header', () => {
+
+        const mediaType = Accept.mediaType('text/html, text/plain, application/json');
+        expect(mediaType).to.equal('text/html');
+    });
+
+    it('respects weights', () => {
+
+        const mediaType = Accept.mediaType('application/json;q=0.6, text/plain;q=0.8');
+        expect(mediaType).to.equal('text/plain');
+    });
+
+    it('requires the preferences parameter to be an array', () => {
+
+        expect(() => {
+
+            Accept.mediaType('application/json;q=0.6, text/plain;q=0.8', 'text/plain');
+        }).to.throw('Preferences must be an array');
+    });
+
+    it('returns */* with header is empty', () => {
+
+        const mediaType = Accept.mediaType('');
+        expect(mediaType).to.equal('*/*');
+    });
+
+    it('returns */* if header is missing', () => {
+
+        const mediaType = Accept.mediaType();
+        expect(mediaType).to.equal('*/*');
+    });
+
+    it('ignores an empty preferences array', () => {
+
+        const mediaType = Accept.mediaType('text/plain, text/html, application/json', []);
+        expect(mediaType).to.equal('text/plain');
+    });
+
+    it('returns empty string if none of the preferences match', () => {
+
+        const mediaType = Accept.mediaType('text/csv, application/json, text/plain', ['text/html']);
+        expect(mediaType).to.equal('');
+    });
+
+    it('returns first preference if header has *', () => {
+
+        const mediaType = Accept.mediaType('text/html, application/json, text/plain, *', ['text/csv']);
+        expect(mediaType).to.equal('text/csv');
+    });
+
+    it('returns first found preference that header includes', () => {
+
+        const mediaType = Accept.mediaType('text/html, application/json, text/plain', ['text/csv', 'application/json']);
+        expect(mediaType).to.equal('application/json');
+    });
+
+    it('returns preference with highest specificity', () => {
+
+        const mediaType = Accept.mediaType('text/*, text/html, application/json', ['text/plain', 'text/html']);
+        expect(mediaType).to.equal('text/plain');
+    });
+
+    it('return media type with highest weight', () => {
+
+        const mediaType = Accept.mediaType('text/html;q=0.5, text/plain;q=1', ['text/html', 'text/plain']);
+        expect(mediaType).to.equal('text/plain');
+    });
+
+});
+
 describe('mediaTypes()', () => {
 
     it('returns */* when header is missing', () => {
