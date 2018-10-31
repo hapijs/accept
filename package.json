@@ -11,7 +11,7 @@
     "accept-encoding"
   ],
   "engines": {
-    "node": ">=8.9.0"
+    "node": ">=8.12.0"
   },
   "dependencies": {
     "boom": "7.x.x",
