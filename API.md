@@ -7,6 +7,7 @@
     - [`encodings(encodingHeader)`](#encodingsencodingheader)
     - [`language(languageHeader, [preferences])`](#languagelanguageheader-preferences)
     - [`languages(languageHeader)`](#languageslanguageheader)
+    - [`mediaType(mediaTypeHeader, [preferences])`](#mediatypemediatypeheader-preferences)
     - [`mediaTypes(mediaTypeHeader)`](#mediatypesmediatypeheader)
     - [`parseAll(headers)`](#parseallheaders)
 - [Q Weightings](#q-weightings)
@@ -68,6 +69,18 @@ Given a string of acceptable languages from a HTTP request Accept-Language heade
 
 ```
 const languages = Accept.languages("da, en;q=0.7, en-GB;q=0.8"); // languages === ["da", "en-GB", "en"]
+```
+
+### `mediaType(mediaTypeHeader, [preferences])`
+
+Given a string of acceptable media types from a HTTP request Accept header, and optionally an array of preferences, it will return a string with the best fit media type that should be used in the HTTP response.  If no preferences array parameter is given the highest weighted or first ordered media type is returned.  If weightings are given in the header (using the q parameter) they are taken into account and the highest weighted match is returned.  If a preferences array is given the best match from the array is returned.  For more information about how the preferences array works see the section below on [Preferences](#preferences).
+
+```
+const mediaType = Accept.mediaType("text/plain, application/json;q=0.5, text/html, */*;q=0.1");
+// mediaType === "text/plain"
+
+const mediaType = Accept.mediaType("text/plain, application/json;q=0.5, text/html, */*;q=0.1", ["text/html", "application/json"]);
+// mediaType === "text/html"
 ```
 
 ### `mediaTypes(mediaTypeHeader)`
