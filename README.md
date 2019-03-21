@@ -1,10 +1,12 @@
-#Accept
+# accept
 
 HTTP Accept-* headers parsing.
 
-[![npm version](https://badge.fury.io/js/accept.svg)](http://badge.fury.io/js/accept) [![Build Status](https://secure.travis-ci.org/hapijs/accept.png)](http://travis-ci.org/hapijs/accept) [![Dependency Status](https://david-dm.org/hapijs/accept.svg)](https://david-dm.org/hapijs/accept)
+[![Build Status](https://travis-ci.org/hapijs/accept.svg?branch=v2-commercial)](https://travis-ci.org/hapijs/accept)
 
-Lead Maintainer - [Mark Bradshaw](https://github.com/mark-bradshaw)
+## License
+
+This version of the package requires a commercial license. You may not use, copy, or distribute it without first acquiring a commercial license from Sideway Inc. Using this software without a license is a violation of US and international law. To obtain a license, please contact [sales@sideway.com](mailto:sales@sideway.com). The open source version of this package can be found [here](https://github.com/hapijs/accept).
 
 ## Introduction
 

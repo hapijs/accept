@@ -1,23 +1,18 @@
 'use strict';
 
-// Load modules
-
 const Accept = require('..');
 const Code = require('code');
 const Lab = require('lab');
 
 
-// Declare internals
-
 const internals = {};
 
-
-// Test shortcuts
 
 const lab = exports.lab = Lab.script();
 const describe = lab.describe;
 const it = lab.it;
 const expect = Code.expect;
+
 
 /*
     Accept-Encoding: compress, gzip
