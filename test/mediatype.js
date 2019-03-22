@@ -53,8 +53,18 @@ describe('mediaTypes()', () => {
 
     it('orders most specific to least specific', (done) => {
 
-        const mediaTypes = Accept.mediaTypes('text/*, text/plain, text/plain;format=flowed, */*');
-        expect(mediaTypes).to.equal(['text/plain;format=flowed', 'text/plain', 'text/*', '*/*']);
+        const mediaTypes = Accept.mediaTypes('text/*, text/plain;format=flowed, text/plain, text/plain;level=1, text/html, text/plain;level=2, */*, image/*, text/rich');
+        expect(mediaTypes).to.equal([
+            'text/plain;format=flowed',
+            'text/plain;level=1',
+            'text/plain;level=2',
+            'text/plain',
+            'text/html',
+            'text/*',
+            '*/*',
+            'image/*',
+            'text/rich'
+        ]);
         done();
     });
 
