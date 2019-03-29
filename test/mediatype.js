@@ -19,7 +19,7 @@ describe('mediaType()', () => {
     it('parses the header', () => {
 
         const mediaType = Accept.mediaType(',text/html, text/plain,, application/json');
-        expect(mediaType).to.equal('text/html');
+        expect(mediaType).to.equal('application/json');
     });
 
     it('respects weights', () => {
@@ -51,7 +51,7 @@ describe('mediaType()', () => {
     it('ignores an empty preferences array', () => {
 
         const mediaType = Accept.mediaType('text/plain, text/html, application/json', []);
-        expect(mediaType).to.equal('text/plain');
+        expect(mediaType).to.equal('application/json');
     });
 
     it('returns empty string if none of the preferences match', () => {
@@ -114,13 +114,13 @@ describe('mediaTypes()', () => {
     it('parses header', () => {
 
         const mediaTypes = Accept.mediaTypes('text/plain, application/json;q=0.5, text/html, */*;q=0.1, audio/*');
-        expect(mediaTypes).to.equal(['text/plain', 'text/html', 'audio/*', 'application/json', '*/*']);
+        expect(mediaTypes).to.equal(['audio/*', 'text/html', 'text/plain', 'application/json', '*/*']);
     });
 
     it('parses header with preferences', () => {
 
         const mediaTypes = Accept.mediaTypes('text/plain, application/json;q=0.5, text/html, audio/*', ['text/*', 'application/*']);
-        expect(mediaTypes).to.equal(['text/plain', 'text/html', 'application/json']);
+        expect(mediaTypes).to.equal(['text/html', 'text/plain', 'application/json']);
     });
 
     it('returns empty array when everything is disallowed', () => {
@@ -132,7 +132,7 @@ describe('mediaTypes()', () => {
     it('respects disallows', () => {
 
         const mediaTypes = Accept.mediaTypes('text/plain, application/json;q=0.5, text/html, text/drop;q=0');
-        expect(mediaTypes).to.equal(['text/plain', 'text/html', 'application/json']);
+        expect(mediaTypes).to.equal(['text/html', 'text/plain', 'application/json']);
     });
 
     it('orders by weight', () => {
@@ -146,14 +146,14 @@ describe('mediaTypes()', () => {
         const types = 'text/*, text/plain;format=flowed, text/plain, text/plain;level=1, text/html, text/plain;level=2, */*, image/*, text/rich';
         const mediaTypes = Accept.mediaTypes(types);
         expect(mediaTypes).to.equal([
+            'image/*',
+            'text/html',
             'text/plain;format=flowed',
             'text/plain;level=1',
-            'text/plain',
-            'text/html',
             'text/plain;level=2',
-            'text/*',
-            'image/*',
+            'text/plain',
             'text/rich',
+            'text/*',
             '*/*'
         ]);
     });
@@ -190,7 +190,7 @@ describe('mediaTypes()', () => {
     it('invalid weight is ignored', () => {
 
         const mediaTypes = Accept.mediaTypes('text/html;q=0.0001, text/plain;q=1.1, text/csv;q=a');
-        expect(mediaTypes).to.equal(['text/html', 'text/plain', 'text/csv']);
+        expect(mediaTypes).to.equal(['text/csv', 'text/html', 'text/plain']);
     });
 
     it('errors on invalid preference', () => {
