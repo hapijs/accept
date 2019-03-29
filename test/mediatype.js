@@ -1,18 +1,12 @@
 'use strict';
 
-// Load modules
-
 const Accept = require('..');
 const Code = require('code');
 const Lab = require('lab');
 
 
-// Declare internals
-
 const internals = {};
 
-
-// Test shortcuts
 
 const { describe, it } = exports.lab = Lab.script();
 const expect = Code.expect;
@@ -24,7 +18,7 @@ describe('mediaType()', () => {
 
     it('parses the header', () => {
 
-        const mediaType = Accept.mediaType('text/html, text/plain, application/json');
+        const mediaType = Accept.mediaType(',text/html, text/plain,, application/json');
         expect(mediaType).to.equal('text/html');
     });
 
@@ -66,9 +60,9 @@ describe('mediaType()', () => {
         expect(mediaType).to.equal('');
     });
 
-    it('returns first preference if header has *', () => {
+    it('returns first preference if header has */*', () => {
 
-        const mediaType = Accept.mediaType('text/html, application/json, text/plain, *', ['text/csv']);
+        const mediaType = Accept.mediaType('text/html, application/json, text/plain, */*', ['text/csv']);
         expect(mediaType).to.equal('text/csv');
     });
 
@@ -81,7 +75,7 @@ describe('mediaType()', () => {
     it('returns preference with highest specificity', () => {
 
         const mediaType = Accept.mediaType('text/*, text/html, application/json', ['text/plain', 'text/html']);
-        expect(mediaType).to.equal('text/plain');
+        expect(mediaType).to.equal('text/html');
     });
 
     it('return media type with highest weight', () => {
@@ -90,20 +84,43 @@ describe('mediaType()', () => {
         expect(mediaType).to.equal('text/plain');
     });
 
+    it('prioritizes q value over wildcard', () => {
+
+        expect(Accept.mediaType('text/plain;q=0.1, image/*;q=1', ['text/plain', 'image/jpeg'])).to.equal('image/jpeg');
+    });
+
+    it('removes extension parameters', () => {
+
+        expect(Accept.mediaTypes('text/html;charset="ascii";q=0.5;ext=123, text/plain;other="xy z";Q=1')).to.equal([
+            'text/plain;other="xy z"',
+            'text/html;charset="ascii"'
+        ]);
+    });
+
+    it('errors on invalid params', () => {
+
+        expect(() => Accept.mediaType('text/plain;q')).to.throw();
+        expect(() => Accept.mediaType('text/plain;q=')).to.throw();
+    });
 });
 
 describe('mediaTypes()', () => {
 
     it('returns */* when header is missing', () => {
 
-        const mediaTypes = Accept.mediaTypes();
-        expect(mediaTypes).to.equal(['*/*']);
+        expect(Accept.mediaTypes()).to.equal(['*/*']);
     });
 
     it('parses header', () => {
 
-        const mediaTypes = Accept.mediaTypes('text/plain, application/json;q=0.5, text/html, */*;q=0.1');
-        expect(mediaTypes).to.equal(['text/plain', 'text/html', 'application/json', '*/*']);
+        const mediaTypes = Accept.mediaTypes('text/plain, application/json;q=0.5, text/html, */*;q=0.1, audio/*');
+        expect(mediaTypes).to.equal(['text/plain', 'text/html', 'audio/*', 'application/json', '*/*']);
+    });
+
+    it('parses header with preferences', () => {
+
+        const mediaTypes = Accept.mediaTypes('text/plain, application/json;q=0.5, text/html, audio/*', ['text/*', 'application/*']);
+        expect(mediaTypes).to.equal(['text/plain', 'text/html', 'application/json']);
     });
 
     it('returns empty array when everything is disallowed', () => {
@@ -126,24 +143,36 @@ describe('mediaTypes()', () => {
 
     it('orders most specific to least specific', () => {
 
-        const mediaTypes = Accept.mediaTypes('text/*, text/plain;format=flowed, text/plain, text/plain;level=1, text/html, text/plain;level=2, */*, image/*, text/rich');
+        const types = 'text/*, text/plain;format=flowed, text/plain, text/plain;level=1, text/html, text/plain;level=2, */*, image/*, text/rich';
+        const mediaTypes = Accept.mediaTypes(types);
         expect(mediaTypes).to.equal([
             'text/plain;format=flowed',
             'text/plain;level=1',
-            'text/plain;level=2',
             'text/plain',
             'text/html',
+            'text/plain;level=2',
             'text/*',
-            '*/*',
             'image/*',
-            'text/rich'
+            'text/rich',
+            '*/*'
         ]);
+    });
+
+    it('match subtype to preference', () => {
+
+        expect(Accept.mediaTypes('text/html', ['TEXT/*'])).to.equal(['text/html']);
     });
 
     it('keeps wildcard behind more specific', () => {
 
-        const mediaTypes = Accept.mediaTypes('text/html, text/*');
-        expect(mediaTypes).to.equal(['text/html', 'text/*']);
+        expect(Accept.mediaTypes('text/html, text/*')).to.equal(['text/html', 'text/*']);
+        expect(Accept.mediaTypes('text/*, text/html')).to.equal(['text/html', 'text/*']);
+    });
+
+    it('matches */* preference to anything', () => {
+
+        expect(Accept.mediaTypes('text/html, text/*, */*', ['*/*'])).to.equal(['text/html', 'text/*', '*/*']);
+        expect(Accept.mediaTypes('text/html, text/*, */*', ['*/*', 'TEXT/html'])).to.equal(['TEXT/html', 'text/*', '*/*']);
     });
 
     it('keeps the order of two media types with extensions', () => {
@@ -160,7 +189,12 @@ describe('mediaTypes()', () => {
 
     it('invalid weight is ignored', () => {
 
-        const mediaTypes = Accept.mediaTypes('text/html;q=0.0001, text/plain, text/csv;q=1.1');
+        const mediaTypes = Accept.mediaTypes('text/html;q=0.0001, text/plain;q=1.1, text/csv;q=a');
         expect(mediaTypes).to.equal(['text/html', 'text/plain', 'text/csv']);
+    });
+
+    it('errors on invalid preference', () => {
+
+        expect(() => Accept.mediaTypes('text/html', ['*/html'])).to.throw('Invalid media type preference contains wildcard type with a subtype');
     });
 });

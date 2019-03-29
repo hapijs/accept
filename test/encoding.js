@@ -1,18 +1,12 @@
 'use strict';
 
-// Load modules
-
 const Accept = require('..');
 const Code = require('code');
 const Lab = require('lab');
 
 
-// Declare internals
-
 const internals = {};
 
-
-// Test shortcuts
 
 const { describe, it } = exports.lab = Lab.script();
 const expect = Code.expect;
@@ -29,7 +23,7 @@ describe('encoding()', () => {
 
     it('parses header', () => {
 
-        const encoding = Accept.encoding('gzip;q=1.0, identity; q=0.5, *;q=0');
+        const encoding = Accept.encoding('gzip;q=1.0, identity; Q=0.5, *;q=0');
         expect(encoding).to.equal('gzip');
     });
 
@@ -56,7 +50,7 @@ describe('encoding()', () => {
     it('parses header with preferences (case insensitive)', () => {
 
         const encoding = Accept.encoding('GZIP;q=1.0, identity; q=0.5, *;q=0', ['identity', 'deflate', 'gZip']);
-        expect(encoding).to.equal('gzip');
+        expect(encoding).to.equal('gZip');
     });
 
     it('parses header with preferences (x-)', () => {
@@ -122,6 +116,11 @@ describe('encoding()', () => {
     it('errors on invalid header', () => {
 
         expect(() => Accept.encoding('a;b')).to.throw();
+        expect(() => Accept.encoding('a;b;q=1')).to.throw();
+        expect(() => Accept.encoding('a;q')).to.throw();
+        expect(() => Accept.encoding('a;q=')).to.throw();
+        expect(() => Accept.encoding(';q=1')).to.throw();
+        expect(() => Accept.encoding('gzip;a=1')).to.throw();
     });
 
     it('obeys disallow with wildcard', () => {

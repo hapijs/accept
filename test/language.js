@@ -1,18 +1,12 @@
 'use strict';
 
-// Load modules
-
 const Accept = require('..');
 const Code = require('code');
 const Lab = require('lab');
 
 
-// Declare internals
-
 const internals = {};
 
-
-// Test shortcuts
 
 const { describe, it } = exports.lab = Lab.script();
 const expect = Code.expect;
@@ -29,7 +23,7 @@ describe('language()', () => {
     it('respects weights', () => {
 
         const language = Accept.language('en;q=0.6, en-GB;q=0.8');
-        expect(language).to.equal('en-GB');
+        expect(language).to.equal('en-gb');
     });
 
     it('requires the preferences parameter to be an array', () => {
@@ -91,7 +85,7 @@ describe('language()', () => {
     it('ignores preference case when matching', () => {
 
         const language = Accept.language('da, en-GB, en', ['en-us', 'en-gb']); // en-GB vs en-gb
-        expect(language).to.equal('en-GB');
+        expect(language).to.equal('en-gb');
     });
 });
 
@@ -101,31 +95,31 @@ describe('languages()', () => {
     it('parses the header', () => {
 
         const languages = Accept.languages('da, en-GB, en');
-        expect(languages).to.equal(['da', 'en-GB', 'en']);
+        expect(languages).to.equal(['da', 'en-gb', 'en']);
     });
 
     it('orders by weight(q)', () => {
 
         const languages = Accept.languages('da, en;q=0.7, en-GB;q=0.8');
-        expect(languages).to.equal(['da', 'en-GB', 'en']);
+        expect(languages).to.equal(['da', 'en-gb', 'en']);
     });
 
     it('maintains case', () => {
 
         const languages = Accept.languages('da, en-GB, en');
-        expect(languages).to.equal(['da', 'en-GB', 'en']);
+        expect(languages).to.equal(['da', 'en-gb', 'en']);
     });
 
     it('drops zero weighted charsets', () => {
 
         const languages = Accept.languages('da, en-GB, es;q=0, en');
-        expect(languages).to.equal(['da', 'en-GB', 'en']);
+        expect(languages).to.equal(['da', 'en-gb', 'en']);
     });
 
     it('ignores invalid weights', () => {
 
         const languages = Accept.languages('da, en-GB;q=1.1, es;q=a, en;q=0.0001');
-        expect(languages).to.equal(['da', 'en-GB', 'es', 'en']);
+        expect(languages).to.equal(['da', 'en-gb', 'es', 'en']);
     });
 
     it('return empty array when no header is present', () => {
