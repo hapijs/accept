@@ -47,6 +47,13 @@ describe('encoding()', () => {
         expect(encoding).to.equal('gzip');
     });
 
+    it('parses header with preferences (server priority)', () => {
+
+        expect(Accept.encoding('gzip, identity, deflate', ['deflate', 'gzip', 'identity'])).to.equal('deflate');
+        expect(Accept.encoding('gzip, identity, deflate', ['gzip', 'identity'])).to.equal('gzip');
+        expect(Accept.encoding('gzip, identity, deflate;q=0.9', ['deflate', 'gzip', 'identity'])).to.equal('gzip');
+    });
+
     it('parses header with preferences (case insensitive)', () => {
 
         const encoding = Accept.encoding('GZIP;q=1.0, identity; q=0.5, *;q=0', ['identity', 'deflate', 'gZip']);
