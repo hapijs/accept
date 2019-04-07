@@ -4,9 +4,7 @@
 
 HTTP Accept-* headers parsing.
 
-[![npm version](https://badge.fury.io/js/accept.svg)](http://badge.fury.io/js/accept) [![Build Status](https://secure.travis-ci.org/hapijs/accept.png)](http://travis-ci.org/hapijs/accept)
-
-Lead Maintainer - [Eran Hammer](https://github.com/hueniverse)
+[![Build Status](https://secure.travis-ci.org/hapijs/accept.png)](http://travis-ci.org/hapijs/accept)
 
 ## Introduction
 
