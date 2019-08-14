@@ -15,4 +15,3 @@ Additional details about Accept headers and content negotiation can be found in 
 ## API
 
 For information on using Accept see the [API documentation](API.md).
-
