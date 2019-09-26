@@ -1,20 +1,3 @@
-# API Reference
-
-- [Accept](#accept)
-    - [`charset(charsetHeader, [preferences])`](#charsetcharsetheader-preferences)
-    - [`charsets(charsetHeader)`](#charsetscharsetheader)
-    - [`encoding(encodingHeader, [preferences])`](#encodingencodingheader-preferences)
-    - [`encodings(encodingHeader)`](#encodingsencodingheader)
-    - [`language(languageHeader, [preferences])`](#languagelanguageheader-preferences)
-    - [`languages(languageHeader)`](#languageslanguageheader)
-    - [`mediaTypes(mediaTypeHeader)`](#mediatypesmediatypeheader)
-    - [`parseAll(headers)`](#parseallheaders)
-- [Q Weightings](#q-weightings)
-- [Encodings](#encodings)
-    - [Preferences](#preferences)
-    - [Identity](#identity)
-
-## Accept
 
 ### `charset(charsetHeader, [preferences])`
 
