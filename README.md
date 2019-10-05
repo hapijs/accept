@@ -1,17 +1,16 @@
-<a href="http://hapijs.com"><img src="https://raw.githubusercontent.com/hapijs/assets/master/images/family.png" width="180px" align="right" /></a>
+<a href="https://hapi.dev"><img src="https://raw.githubusercontent.com/hapijs/assets/master/images/family.png" width="180px" align="right" /></a>
 
 # @hapi/accept
 
-HTTP Accept-* headers parsing.
+#### HTTP Accept-* headers parsing.
 
-[![Build Status](https://secure.travis-ci.org/hapijs/accept.png)](http://travis-ci.org/hapijs/accept)
+**accept** is part of the **hapi** ecosystem and was designed to work seamlessly with the [hapi web framework](https://hapi.dev) and its other components (but works great on its own or with other frameworks). If you are using a different web framework and find this module useful, check out [hapi](https://hapi.dev) – they work even better together.
 
-## Introduction
+### Visit the [hapi.dev](https://hapi.dev) Developer Portal for tutorials, documentation, and support
 
-Accept helps to answer the question of how best to respond to a HTTP request, based on the requesting browser's capabilities.  Accept will parse the headers of a HTTP request and tell you what the preferred encoding is, what language should be used, and what charsets and media types are accepted.
+## Useful resources
 
-Additional details about Accept headers and content negotiation can be found in [IETF RFC 7231, Section 5.3](https://tools.ietf.org/html/rfc7231#section-5.3).
-
-## API
-
-For information on using Accept see the [API documentation](API.md).
+- [Documentation and API](https://hapi.dev/family/accept/)
+- [Version status](https://hapi.dev/resources/status/#accept) (builds, dependencies, node versions, licenses, eol)
+- [Project policies](https://hapi.dev/policies/)
+- [Free and commercial support options](https://hapi.dev/support/)
