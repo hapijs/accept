@@ -5,22 +5,22 @@
     "repository": "git://github.com/hapijs/accept",
     "main": "lib/index.js",
     "types": "lib/index.d.ts",
+    "files": [
+        "lib"
+    ],
     "keywords": [
         "HTTP",
         "header",
         "accept",
         "accept-encoding"
     ],
-    "files": [
-        "lib"
-    ],
     "dependencies": {
-        "@hapi/boom": "8.x.x",
-        "@hapi/hoek": "8.x.x"
+        "@hapi/boom": "9.x.x",
+        "@hapi/hoek": "9.x.x"
     },
     "devDependencies": {
-        "@hapi/code": "6.x.x",
-        "@hapi/lab": "20.x.x"
+        "@hapi/code": "8.x.x",
+        "@hapi/lab": "22.x.x"
     },
     "scripts": {
         "test": "lab -a @hapi/code -t 100 -L -Y",
