@@ -113,7 +113,7 @@ const encoding = Accept.encoding("gzip;q=1.0, identity;q=0.5", ["identity", "gzi
 
 ### Preferences
 
-If you are looking for a set of specific encodings you can pass that in as an array to the `preferences` parameter.  Your preferences **must** be an array.  In the preferences array you specify a list of possible encodings you want to look for, in order of preference.  Accept will return back the most preferential option it can find, if any match.
+If you are looking for a set of specific encodings you can pass that in as an array to the `preferences` parameter.  Your preferences **must** be an array.  In the preferences array you specify a list of possible encodings you want to look for, in order of preference.  Accept will return back the most preferential option it can find, if any match. The preferences array does not support parameters, only base types.
 
 ```
 const encoding = Accept.encoding("gzip, deflate, sdch", ["deflate", "identity"]); // encoding === "delate"
