@@ -3,6 +3,9 @@
   "description": "HTTP Accept-* headers parsing",
   "version": "2.2.2",
   "repository": "git://github.com/hapijs/accept",
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "main": "lib/index.js",
   "keywords": [
     "HTTP",
