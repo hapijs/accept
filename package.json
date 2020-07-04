@@ -1,8 +1,11 @@
 {
-  "name": "@hapi/accept",
+  "name": "@commercial/accept",
   "description": "HTTP Accept-* headers parsing",
   "version": "3.2.4",
   "repository": "git://github.com/hapijs/accept",
+  "engines": {
+    "node": ">=8.0.0"
+  },
   "main": "lib/index.js",
   "keywords": [
     "HTTP",
@@ -11,8 +14,8 @@
     "accept-encoding"
   ],
   "dependencies": {
-    "@hapi/boom": "7.x.x",
-    "@hapi/hoek": "8.x.x"
+    "@commercial/boom": "^7.4.11",
+    "@commercial/hoek": "8.5.1"
   },
   "devDependencies": {
     "@hapi/code": "6.x.x",
@@ -22,5 +25,5 @@
     "test": "lab -a @hapi/code -t 100 -L",
     "test-cov-html": "lab -a @hapi/code -r html -o coverage.html"
   },
-  "license": "BSD-3-Clause"
+  "license": "SEE LICENSE IN LICENSE.md"
 }
