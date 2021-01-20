@@ -46,10 +46,10 @@ const encodings = Accept.encodings("compress;q=0.5, gzip;q=1.0"); // encodings =
 Given a string of acceptable languages from a HTTP request Accept-Language header, and an optional array of language preferences, it will return a string indicating the best language that can be used in the HTTP response.  It respects the [q weightings](#weightings) of the languages in the header, returning the matched preference with the highest weighting.  The case of the preference does not have to match the case of the option in the header.  
 
 ```
-const language = Accept.language("en;q=0.7, en-GB;q=0.8"); // language === "en-GB"
+const language = Accept.language("en;q=0.7, en-GB;q=0.8"); // language === "en-gb"
 
 // the case of the preference "en-gb" does not match the case of the header option "en-GB"
-const language = Accept.language("en;q=0.7, en-GB;q=0.8", ["en-gb"]); // language === "en-GB"
+const language = Accept.language("en;q=0.7, en-GB;q=0.8", ["en-gb"]); // language === "en-gb"
 ```
 
 ### `languages(languageHeader)`
@@ -57,7 +57,7 @@ const language = Accept.language("en;q=0.7, en-GB;q=0.8", ["en-gb"]); // languag
 Given a string of acceptable languages from a HTTP request Accept-Language header it will return an array of strings indicating the possible languages that can be used in the HTTP response, in order from most preferred to least as determined by the [q weightings](#weightings).
 
 ```
-const languages = Accept.languages("da, en;q=0.7, en-GB;q=0.8"); // languages === ["da", "en-GB", "en"]
+const languages = Accept.languages("da, en;q=0.7, en-GB;q=0.8"); // languages === ["da", "en-gb", "en"]
 ```
 
 ### `mediaType(mediaTypeHeader, [preferences])`
