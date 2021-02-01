@@ -72,7 +72,7 @@ describe('language()', () => {
 
     it('returns preference with highest specificity', () => {
 
-        expect(Accept.language('da, en, en-GB', ['en', 'en-GB'])).to.equal('en');
+        expect(Accept.language('da, en, en-GB', ['en', 'en-GB'])).to.equal('en-GB');
         expect(Accept.language('da, en, en-GB', ['en-GB', 'en'])).to.equal('en-GB');
         expect(Accept.language('en, en-GB, en-US')).to.equal('en-gb');
     });
