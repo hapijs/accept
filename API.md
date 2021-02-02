@@ -43,7 +43,9 @@ const encodings = Accept.encodings("compress;q=0.5, gzip;q=1.0"); // encodings =
 
 ### `language(languageHeader, [preferences])`
 
-Given a string of acceptable languages from a HTTP request Accept-Language header, and an optional array of language preferences, it will return a string indicating the best language that can be used in the HTTP response.  It respects the [q weightings](#weightings) of the languages in the header, returning the matched preference with the highest weighting.  The case of the preference does not have to match the case of the option in the header.  
+Given a string of acceptable language ranges from a HTTP request Accept-Language header, and an optional array of language-tag preferences, it will return a string indicating the best language that can be used in the HTTP response.  It respects the [q weightings](#weightings) of the languages in the header, returning the matched preference with the highest weighting.  The case of the preference does not have to match the case of the option in the header.
+
+If preferences is missing or an empty array, the highest weighted language is returned.  If no preference matches, an empty string is returned.
 
 ```
 const language = Accept.language("en;q=0.7, en-GB;q=0.8"); // language === "en-gb"

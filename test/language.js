@@ -58,23 +58,23 @@ describe('language()', () => {
         expect(language).to.equal('');
     });
 
-    it('returns first preference if header has *', () => {
+    it('returns first preference if header has * and is unmatched', () => {
 
-        const language = Accept.language('da, en-GB, en, *', ['en-US']);
+        const language = Accept.language('da, en-GB, *', ['en-US']);
         expect(language).to.equal('en-US');
     });
 
     it('returns first found preference that header includes', () => {
 
         const language = Accept.language('da, en-GB, en', ['en-US', 'en-GB']);
-        expect(language).to.equal('en-GB');
+        expect(language).to.equal('en-US');
     });
 
-    it('returns preference with highest specificity', () => {
+    it('returns preference with highest order when equal weigths', () => {
 
         expect(Accept.language('da, en, en-GB', ['en', 'en-GB'])).to.equal('en');
         expect(Accept.language('da, en, en-GB', ['en-GB', 'en'])).to.equal('en-GB');
-        expect(Accept.language('en, en-GB, en-US')).to.equal('en-gb');
+        expect(Accept.language('en, en-GB, en-US')).to.equal('en');
     });
 
     it('return language with heighest weight', () => {
@@ -86,7 +86,23 @@ describe('language()', () => {
     it('ignores preference case when matching', () => {
 
         const language = Accept.language('da, en-GB, en', ['en-us', 'en-gb']); // en-GB vs en-gb
-        expect(language).to.equal('en-gb');
+        expect(language).to.equal('en-us');
+    });
+
+    it('returns language using range match', () => {
+
+        expect(Accept.language('da', ['da-DK'])).to.equal('da-DK');
+        expect(Accept.language('en-US, en', ['en-GB', 'en-US'])).to.equal('en-GB');
+        expect(Accept.language('da, en', ['da-DK', 'en-GB'])).to.equal('da-DK');
+        expect(Accept.language('en, da', ['da-DK', 'en-GB'])).to.equal('da-DK');
+        expect(Accept.language('en, da', ['en', 'en-GB'])).to.equal('en');
+        expect(Accept.language('da, en-GB', ['da-DK', 'en-GB'])).to.equal('da-DK');
+        expect(Accept.language('en, en-GB', ['en-US', 'en-GB', 'da-DK'])).to.equal('en-US');
+    });
+
+    it('explicit preference overrides range match', () => {
+
+        expect(Accept.language('da, en-GB', ['da-DK', 'en-GB', 'da'])).to.equal('en-GB');
     });
 });
 
