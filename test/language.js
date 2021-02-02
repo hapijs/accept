@@ -77,7 +77,7 @@ describe('language()', () => {
         expect(Accept.language('en, en-GB, en-US')).to.equal('en-gb');
     });
 
-    it('return language with heighest weight', () => {
+    it('returns language with heighest weight', () => {
 
         const language = Accept.language('da;q=0.5, en;q=1', ['da', 'en']);
         expect(language).to.equal('en');
@@ -87,6 +87,12 @@ describe('language()', () => {
 
         const language = Accept.language('da, en-GB, en', ['en-us', 'en-gb']); // en-GB vs en-gb
         expect(language).to.equal('en-gb');
+    });
+
+    it('returns a more specific preference if a less specific one is requested', () => {
+
+        const language = Accept.language('de-LI,de', ['en-us', 'de-de']);
+        expect(language).to.equal('de-de');
     });
 });
 
@@ -123,15 +129,16 @@ describe('languages()', () => {
         expect(languages).to.equal(['da', 'en-gb', 'es', 'en']);
     });
 
-    it('return empty array when no header is present', () => {
+    it('returns empty array when no header is present', () => {
 
         const languages = Accept.languages();
         expect(languages).to.equal([]);
     });
 
-    it('return empty array when header is empty', () => {
+    it('returns empty array when header is empty', () => {
 
         const languages = Accept.languages('');
         expect(languages).to.equal([]);
     });
+
 });
