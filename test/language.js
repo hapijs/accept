@@ -85,8 +85,8 @@ describe('language()', () => {
 
     it('ignores preference case when matching', () => {
 
-        const language = Accept.language('da, en-GB, en', ['en-us', 'en-gb']); // en-GB vs en-gb
-        expect(language).to.equal('en-us');
+        const language = Accept.language('da, en-GB, en-us', ['en-gb', 'en-us']); // en-GB vs en-gb
+        expect(language).to.equal('en-gb');
     });
 
     it('returns language using range match', () => {
