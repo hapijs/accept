@@ -76,10 +76,11 @@ export function mediaType(header?: string, preferences?: string[]): string;
  * Sorts the media-types in the HTTP request Accept header based on client preference from most to least desired.
  *
  * @param header - the HTTP Accept header content.
+ * @param preferences - an optional array of media-type strings in order of server preference.
  *
  * @return an array of strings of media-types sorted from the most to the least desired.
  */
-export function mediaTypes(header?: string): string[];
+export function mediaTypes(header?: string, preferences?: string[]): string[];
 
 
 /**
