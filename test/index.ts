@@ -107,6 +107,7 @@ expect.error(Accept.mediaType('application/json;q=0.6, text/plain;q=0.8', 'test/
 // mediaTypes()
 
 Accept.mediaTypes('application/json;q=0.6, text/plain;q=0.8');
+Accept.mediaTypes('', ['text/plain']);
 Accept.mediaTypes('');
 Accept.mediaTypes();
 
@@ -114,7 +115,6 @@ expect.type<string[]>(Accept.mediaTypes('application/json;q=0.6, text/plain;q=0.
 
 expect.error(Accept.mediaTypes(123));
 expect.error(Accept.mediaTypes('', ''));
-expect.error(Accept.mediaTypes('', ['']));
 
 
 // parseAll()
