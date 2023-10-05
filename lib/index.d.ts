@@ -6,7 +6,7 @@
  * 
  * @return a string with the preferred accepted character-set.
  */
-export function charset(header?: string, preferences?: string[]): string;
+export function charset(header?: string, preferences?: readonly string[]): string;
 
 
 /**
@@ -27,7 +27,7 @@ export function charsets(header?: string): string[];
  *
  * @return a string with the preferred accepted encoding.
  */
-export function encoding(header?: string, preferences?: string[]): string;
+export function encoding(header?: string, preferences?: readonly string[]): string;
 
 
 /**
@@ -48,7 +48,7 @@ export function encodings(header?: string): string[];
  *
  * @return a string with the preferred accepted language.
  */
-export function language(header?: string, preferences?: string[]): string;
+export function language(header?: string, preferences?: readonly string[]): string;
 
 
 /**
@@ -69,7 +69,7 @@ export function languages(header?: string): string[];
  *
  * @return a string with the preferred accepted media-type.
  */
-export function mediaType(header?: string, preferences?: string[]): string;
+export function mediaType(header?: string, preferences?: readonly string[]): string;
 
 
 /**
@@ -80,7 +80,7 @@ export function mediaType(header?: string, preferences?: string[]): string;
  *
  * @return an array of strings of media-types sorted from the most to the least desired.
  */
-export function mediaTypes(header?: string, preferences?: string[]): string[];
+export function mediaTypes(header?: string, preferences?: readonly string[]): string[];
 
 
 /**
