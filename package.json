@@ -1,5 +1,5 @@
 {
-  "name": "@commercial/accept",
+  "name": "accept",
   "description": "HTTP Accept-* headers parsing",
   "version": "2.2.2",
   "repository": "git://github.com/hapijs/accept",
@@ -14,8 +14,8 @@
     "accept-encoding"
   ],
   "dependencies": {
-    "@commercial/boom": "5.x.x",
-    "@commercial/hoek": "4.x.x"
+    "boom": "5.x.x",
+    "hoek": "4.x.x"
   },
   "devDependencies": {
     "code": "4.x.x",
