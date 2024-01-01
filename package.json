@@ -1,7 +1,7 @@
 {
   "name": "accept",
   "description": "HTTP Accept-* headers parsing",
-  "version": "2.2.2",
+  "version": "2.2.3",
   "repository": "git://github.com/hapijs/accept",
   "engines": {
     "node": ">=6.0.0"
