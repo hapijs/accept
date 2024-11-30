@@ -162,4 +162,10 @@ describe('encodings()', () => {
         const encodings = Accept.encodings('compress;q=0.5, gzip;q=1.0, identity;q=0');
         expect(encodings).to.equal(['gzip', 'compress']);
     });
+
+    it('parses header (exclude identity as wildcard)', () => {
+
+        const encodings = Accept.encodings('compress;q=0.5, gzip;q=1.0, *;q=0');
+        expect(encodings).to.equal(['gzip', 'compress']);
+    });
 });
