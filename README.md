@@ -2,7 +2,7 @@
 
 # @hapi/accept
 
-#### HTTP Accept-* headers parsing.
+#### HTTP Accept-\* headers parsing.
 
 **accept** is part of the **hapi** ecosystem and was designed to work seamlessly with the [hapi web framework](https://hapi.dev) and its other components (but works great on its own or with other frameworks). If you are using a different web framework and find this module useful, check out [hapi](https://hapi.dev) – they work even better together.
 

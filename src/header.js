@@ -1,26 +1,16 @@
-'use strict';
+import * as Boom from '@hapi/boom';
+import * as Hoek from '@hapi/hoek';
 
-const Hoek = require('@hapi/hoek');
-const Boom = require('@hapi/boom');
-
-
-const internals = {};
-
-
-exports.selection = function (header, preferences, options) {
-
-    const selections = exports.selections(header, preferences, options);
-    return selections.length ? selections[0] : '';
+export const selection = function (header, preferences, options) {
+    const results = selections(header, preferences, options);
+    return results.length ? results[0] : '';
 };
 
-
-exports.selections = function (header, preferences, options) {
-
+export const selections = function (header, preferences, options) {
     Hoek.assert(!preferences || Array.isArray(preferences), 'Preferences must be an array');
 
-    return internals.parse(header || '', preferences, options);
+    return parse(header || '', preferences, options);
 };
-
 
 //      RFC 7231 Section 5.3.3 (https://tools.ietf.org/html/rfc7231#section-5.3.3)
 //
@@ -28,7 +18,6 @@ exports.selections = function (header, preferences, options) {
 //      charset         = token
 //
 //      Accept-Charset: iso-8859-5, unicode-1-1;q=0.8
-
 
 //      RFC 7231 Section 5.3.4 (https://tools.ietf.org/html/rfc7231#section-5.3.4)
 //
@@ -42,7 +31,6 @@ exports.selections = function (header, preferences, options) {
 //      Accept-Encoding: compress;q=0.5, gzip;q=1.0
 //      Accept-Encoding: gzip;q=1.0, identity; q=0.5, *;q=0
 
-
 //      RFC 7231 Section 5.3.5 (https://tools.ietf.org/html/rfc7231#section-5.3.5)
 //
 //      Accept-Language = *( "," OWS ) ( language-range [ weight ] ) *( OWS "," [ OWS ( language-range [ weight ] ) ] )
@@ -51,14 +39,12 @@ exports.selections = function (header, preferences, options) {
 //
 //       Accept-Language: da, en-gb;q=0.8, en;q=0.7
 
-
 //      token           = 1*tchar
 //      tchar           = "!" / "#" / "$" / "%" / "&" / "'" / "*"
 //                        / "+" / "-" / "." / "^" / "_" / "`" / "|" / "~"
 //                        / DIGIT / ALPHA
 //                        ; any VCHAR, except delimiters
 //      OWS             = *( SP / HTAB )
-
 
 //      RFC 7231 Section 5.3.1 (https://tools.ietf.org/html/rfc7231#section-5.3.1)
 //
@@ -70,9 +56,7 @@ exports.selections = function (header, preferences, options) {
 //       weight = OWS ";" OWS "q=" qvalue
 //       qvalue = ( "0" [ "." 0*3DIGIT ] ) / ( "1" [ "." 0*3("0") ] )
 
-
-internals.parse = function (raw, preferences, options) {
-
+const parse = function (raw, preferences, options) {
     // Normalize header (remove spaces and tabs)
 
     const header = raw.replace(/[ \t]/g, '');
@@ -88,7 +72,7 @@ internals.parse = function (raw, preferences, options) {
 
             if (options.prefixMatch) {
                 const parts = lower.split('-');
-                while (parts.pop(), parts.length > 0) {
+                while ((parts.pop(), parts.length > 0)) {
                     const joined = parts.join('-');
                     if (!lowers.has(joined)) {
                         lowers.set(joined, { orig: preference, pos: pos++ });
@@ -101,12 +85,14 @@ internals.parse = function (raw, preferences, options) {
     // Parse selections
 
     const parts = header.split(',');
-    const selections = [];
+    const results = [];
     const map = new Set();
 
     for (let i = 0; i < parts.length; ++i) {
         const part = parts[i];
-        if (!part) {                            // Ignore empty parts or leading commas
+        // Ignore empty parts or leading commas
+
+        if (!part) {
             continue;
         }
 
@@ -126,19 +112,17 @@ internals.parse = function (raw, preferences, options) {
             token = options.equivalents.get(token);
         }
 
-        const selection = {
+        const item = {
             token,
             pos: i,
-            q: 1
+            q: 1,
         };
 
-        if (preferences &&
-            lowers.has(token)) {
-
-            selection.pref = lowers.get(token).pos;
+        if (preferences && lowers.has(token)) {
+            item.pref = lowers.get(token).pos;
         }
 
-        map.add(selection.token);
+        map.add(item.token);
 
         // Parse q=value
 
@@ -146,9 +130,7 @@ internals.parse = function (raw, preferences, options) {
             const q = params[1];
             const [key, value] = q.split('=');
 
-            if (!value ||
-                key !== 'q' && key !== 'Q') {
-
+            if (!value || (key !== 'q' && key !== 'Q')) {
                 throw Boom.badRequest(`Invalid ${options.type} header`);
             }
 
@@ -157,28 +139,23 @@ internals.parse = function (raw, preferences, options) {
                 continue;
             }
 
-            if (Number.isFinite(score) &&
-                score <= 1 &&
-                score >= 0.001) {
-
-                selection.q = score;
+            if (Number.isFinite(score) && score <= 1 && score >= 0.001) {
+                item.q = score;
             }
         }
 
-        selections.push(selection);             // Only add allowed selections (q !== 0)
+        results.push(item); // Only add allowed selections (q !== 0)
     }
 
     // Sort selection based on q and then position in header
 
-    selections.sort(internals.sort);
+    results.sort(sort);
 
     // Extract tokens
 
-    const values = selections.map((selection) => selection.token);
+    const values = results.map((item) => item.token);
 
-    if (options.default &&
-        !map.has(options.default)) {
-
+    if (options.default && !map.has(options.default)) {
         values.push(options.default);
     }
 
@@ -187,16 +164,15 @@ internals.parse = function (raw, preferences, options) {
     }
 
     const preferred = [];
-    for (const selection of values) {
-        if (selection === '*') {
-            for (const [preference, value] of lowers) {
+    for (const value of values) {
+        if (value === '*') {
+            for (const [preference, prefValue] of lowers) {
                 if (!map.has(preference)) {
-                    preferred.push(value.orig);
+                    preferred.push(prefValue.orig);
                 }
             }
-        }
-        else {
-            const lower = selection.toLowerCase();
+        } else {
+            const lower = value.toLowerCase();
             if (lowers.has(lower)) {
                 preferred.push(lowers.get(lower).orig);
             }
@@ -206,9 +182,7 @@ internals.parse = function (raw, preferences, options) {
     return preferred;
 };
 
-
-internals.sort = function (a, b) {
-
+const sort = function (a, b) {
     const aFirst = -1;
     const bFirst = 1;
 

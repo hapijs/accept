@@ -1,38 +1,51 @@
 {
-  "name": "@hapi/accept",
-  "description": "HTTP Accept-* headers parsing",
-  "version": "6.0.3",
-  "repository": "git://github.com/hapijs/accept",
-  "main": "lib/index.js",
-  "types": "lib/index.d.ts",
-  "files": [
-    "lib"
-  ],
-  "keywords": [
-    "HTTP",
-    "header",
-    "accept",
-    "accept-encoding"
-  ],
-  "eslintConfig": {
-    "extends": [
-      "plugin:@hapi/module"
-    ]
-  },
-  "dependencies": {
-    "@hapi/boom": "^10.0.1",
-    "@hapi/hoek": "^11.0.2"
-  },
-  "devDependencies": {
-    "@hapi/code": "^9.0.3",
-    "@hapi/eslint-plugin": "^7.0.0",
-    "@hapi/lab": "^26.0.0",
-    "@types/node": "^17.0.31",
-    "typescript": "~4.6.4"
-  },
-  "scripts": {
-    "test": "lab -a @hapi/code -t 100 -L -Y",
-    "test-cov-html": "lab -a @hapi/code -r html -o coverage.html"
-  },
-  "license": "BSD-3-Clause"
+    "name": "@hapi/accept",
+    "version": "6.0.3",
+    "description": "HTTP Accept-* headers parsing",
+    "keywords": [
+        "HTTP",
+        "accept",
+        "accept-encoding",
+        "header"
+    ],
+    "license": "BSD-3-Clause",
+    "repository": "git://github.com/hapijs/accept",
+    "files": [
+        "src",
+        "API.md",
+        "README.md"
+    ],
+    "type": "module",
+    "types": "src/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./src/index.d.ts",
+            "default": "./src/index.js"
+        }
+    },
+    "scripts": {
+        "test": "vitest run --coverage",
+        "typecheck": "tsc --noEmit",
+        "lint": "oxlint",
+        "lint:fix": "oxlint --fix",
+        "fmt": "oxfmt --check",
+        "fmt:fix": "oxfmt",
+        "check": "npm run lint && npm run fmt && npm run typecheck && npm test"
+    },
+    "dependencies": {
+        "@hapi/boom": "^10.0.1",
+        "@hapi/hoek": "^12.0.0-rc.0"
+    },
+    "devDependencies": {
+        "@hapi/oxc-plugin": "^1.0.4",
+        "@types/node": "^22",
+        "@vitest/coverage-v8": "^4.1.10",
+        "oxfmt": "^0.61.0",
+        "oxlint": "^1.76.0",
+        "typescript": "^6.0.3",
+        "vitest": "^4.1.10"
+    },
+    "engines": {
+        "node": ">=22"
+    }
 }

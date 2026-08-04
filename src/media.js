@@ -1,26 +1,16 @@
-'use strict';
+import * as Boom from '@hapi/boom';
+import * as Hoek from '@hapi/hoek';
 
-const Hoek = require('@hapi/hoek');
-const Boom = require('@hapi/boom');
-
-
-const internals = {};
-
-
-exports.selection = function (header, preferences) {
-
-    const selections = exports.selections(header, preferences);
-    return selections.length ? selections[0] : '';
+export const selection = function (header, preferences) {
+    const results = selections(header, preferences);
+    return results.length ? results[0] : '';
 };
 
-
-exports.selections = function (header, preferences) {
-
+export const selections = function (header, preferences) {
     Hoek.assert(!preferences || Array.isArray(preferences), 'Preferences must be an array');
 
-    return internals.parse(header, preferences);
+    return parse(header, preferences);
 };
-
 
 //      RFC 7231 Section 5.3.2 (https://tools.ietf.org/html/rfc7231#section-5.3.2)
 //
@@ -48,7 +38,6 @@ exports.selections = function (header, preferences) {
 //      Accept: text/*, text/plain, text/plain;format=flowed, */*
 //      Accept: text/*;q=0.3, text/html;q=0.7, text/html;level=1, text/html;level=2;q=0.4, */*;q=0.5
 
-
 //      RFC 7231 Section 5.3.1 (https://tools.ietf.org/html/rfc7231#section-5.3.1)
 //
 //      The weight is normalized to a real number in the range 0 through 1,
@@ -59,26 +48,26 @@ exports.selections = function (header, preferences) {
 //       weight = OWS ";" OWS "q=" qvalue
 //       qvalue = ( "0" [ "." 0*3DIGIT ] ) / ( "1" [ "." 0*3("0") ] )
 
-
 //                         */*        type/*                              type/subtype
-internals.validMediaRx = /^(?:\*\/\*)|(?:[\w\!#\$%&'\*\+\-\.\^`\|~]+\/\*)|(?:[\w\!#\$%&'\*\+\-\.\^`\|~]+\/[\w\!#\$%&'\*\+\-\.\^`\|~]+)$/;
+const validMediaRx =
+    /^(?:\*\/\*)|(?:[\w\!#\$%&'\*\+\-\.\^`\|~]+\/\*)|(?:[\w\!#\$%&'\*\+\-\.\^`\|~]+\/[\w\!#\$%&'\*\+\-\.\^`\|~]+)$/;
 
-
-internals.parse = function (raw, preferences) {
-
+const parse = function (raw, preferences) {
     // Normalize header (remove spaces and temporary remove quoted strings)
 
-    const { header, quoted } = internals.normalize(raw);
+    const { header, quoted } = normalize(raw);
 
     // Parse selections
 
     const parts = header.split(',');
-    const selections = [];
+    const results = [];
     const map = {};
 
     for (let i = 0; i < parts.length; ++i) {
         const part = parts[i];
-        if (!part) {                                    // Ignore empty parts or leading commas
+        // Ignore empty parts or leading commas
+
+        if (!part) {
             continue;
         }
 
@@ -87,15 +76,17 @@ internals.parse = function (raw, preferences) {
         const pairs = part.split(';');
         const token = pairs.shift().toLowerCase();
 
-        if (!internals.validMediaRx.test(token)) {       // Ignore invalid types
+        // Ignore invalid types
+
+        if (!validMediaRx.test(token)) {
             continue;
         }
 
-        const selection = {
+        const item = {
             token,
             params: {},
             exts: {},
-            pos: i
+            pos: i,
         };
 
         // Parse key=value
@@ -103,79 +94,72 @@ internals.parse = function (raw, preferences) {
         let target = 'params';
         for (const pair of pairs) {
             const kv = pair.split('=');
-            if (kv.length !== 2 ||
-                !kv[1]) {
-
+            if (kv.length !== 2 || !kv[1]) {
                 throw Boom.badRequest(`Invalid accept header`);
             }
 
             const key = kv[0];
             let value = kv[1];
 
-            if (key === 'q' ||
-                key === 'Q') {
-
+            if (key === 'q' || key === 'Q') {
                 target = 'exts';
 
                 value = parseFloat(value);
-                if (!Number.isFinite(value) ||
-                    value > 1 ||
-                    (value < 0.001 && value !== 0)) {
-
+                if (!Number.isFinite(value) || value > 1 || (value < 0.001 && value !== 0)) {
                     value = 1;
                 }
 
-                selection.q = value;
-            }
-            else {
+                item.q = value;
+            } else {
                 if (value[0] === '"') {
                     value = `"${quoted[value]}"`;
                 }
 
-                selection[target][kv[0]] = value;
+                item[target][kv[0]] = value;
             }
         }
 
-        const params = Object.keys(selection.params);
-        selection.original = [''].concat(params.map((key) => `${key}=${selection.params[key]}`)).join(';');
-        selection.specificity = params.length;
+        const params = Object.keys(item.params);
+        item.original = [''].concat(params.map((key) => `${key}=${item.params[key]}`)).join(';');
+        item.specificity = params.length;
 
-        if (selection.q === undefined) {     // Default no preference to q=1 (top preference)
-            selection.q = 1;
+        // Default no preference to q=1 (top preference)
+
+        if (item.q === undefined) {
+            item.q = 1;
         }
 
-        const tparts = selection.token.split('/');
-        selection.type = tparts[0];
-        selection.subtype = tparts[1];
+        const tparts = item.token.split('/');
+        item.type = tparts[0];
+        item.subtype = tparts[1];
 
-        map[selection.token] = selection;
+        map[item.token] = item;
 
-        if (selection.q) {                   // Skip denied selections (q=0)
-            selections.push(selection);
+        // Skip denied selections (q=0)
+
+        if (item.q) {
+            results.push(item);
         }
     }
 
     // Sort selection based on q and then position in header
 
-    selections.sort(internals.sort);
+    results.sort(sort);
 
-    return internals.preferences(map, selections, preferences);
+    return filterPreferences(map, results, preferences);
 };
 
-
-internals.normalize = function (raw) {
-
+const normalize = function (raw) {
     raw = raw || '*/*';
 
     const normalized = {
         header: raw,
-        quoted: {}
+        quoted: {},
     };
 
     if (raw.includes('"')) {
         let i = 0;
         normalized.header = raw.replace(/="([^"]*)"/g, ($0, $1) => {
-
             const key = '"' + ++i;
             normalized.quoted[key] = $1;
             return '=' + key;
@@ -186,9 +170,7 @@ internals.normalize = function (raw) {
     return normalized;
 };
 
-
-internals.sort = function (a, b) {
-
+const sort = function (a, b) {
     // Sort by quality score
 
     if (b.q !== a.q) {
@@ -198,13 +180,13 @@ internals.sort = function (a, b) {
     // Sort by type
 
     if (a.type !== b.type) {
-        return internals.innerSort(a, b, 'type');
+        return innerSort(a, b, 'type');
     }
 
     // Sort by subtype
 
     if (a.subtype !== b.subtype) {
-        return internals.innerSort(a, b, 'subtype');
+        return innerSort(a, b, 'subtype');
     }
 
     // Sort by specificity
@@ -216,9 +198,7 @@ internals.sort = function (a, b) {
     return a.pos - b.pos;
 };
 
-
-internals.innerSort = function (a, b, key) {
-
+const innerSort = function (a, b, key) {
     const aFirst = -1;
     const bFirst = 1;
 
@@ -230,16 +210,14 @@ internals.innerSort = function (a, b, key) {
         return aFirst;
     }
 
-    return a[key] < b[key] ? aFirst : bFirst;       // Group alphabetically
+    return a[key] < b[key] ? aFirst : bFirst; // Group alphabetically
 };
 
-
-internals.preferences = function (map, selections, preferences) {
-
+const filterPreferences = function (map, results, preferences) {
     // Return selections if no preferences
 
     if (!preferences?.length) {
-        return selections.map((selection) => selection.token + selection.original);
+        return results.map((item) => item.token + item.original);
     }
 
     // Map wildcards and filter selections to preferences
@@ -266,8 +244,8 @@ internals.preferences = function (map, selections, preferences) {
     }
 
     const preferred = [];
-    for (const selection of selections) {
-        const token = selection.token;
+    for (const item of results) {
+        const token = item.token;
         const { type, subtype } = map[token];
         const subtypes = lowers[type];
 
@@ -290,7 +268,7 @@ internals.preferences = function (map, selections, preferences) {
         // any
 
         if (any) {
-            preferred.push((flat[token] || token) + selection.original);
+            preferred.push((flat[token] || token) + item.original);
             continue;
         }
 
@@ -298,10 +276,8 @@ internals.preferences = function (map, selections, preferences) {
 
         if (subtype !== '*') {
             const pref = flat[token];
-            if (pref ||
-                (subtypes && subtypes['*'])) {
-
-                preferred.push((pref || token) + selection.original);
+            if (pref || (subtypes && subtypes['*'])) {
+                preferred.push((pref || token) + item.original);
             }
 
             continue;
