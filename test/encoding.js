@@ -162,4 +162,22 @@ describe('encodings()', () => {
         const encodings = Accept.encodings('compress;q=0.5, gzip;q=1.0, identity;q=0');
         expect(encodings).to.equal(['gzip', 'compress']);
     });
+
+    it('parses header (wildcard q=0 excludes default identity)', () => {
+
+        const encodings = Accept.encodings('compress;q=0.5, *;q=0');
+        expect(encodings).to.equal(['compress']);
+    });
+
+    it('parses header (wildcard q=0 only)', () => {
+
+        const encodings = Accept.encodings('*;q=0');
+        expect(encodings).to.equal([]);
+    });
+
+    it('parses header with preferences (wildcard q=0)', () => {
+
+        const encoding = Accept.encoding('compress;q=0.5, *;q=0', ['identity', 'compress']);
+        expect(encoding).to.equal('compress');
+    });
 });
